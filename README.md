@@ -1046,10 +1046,9 @@ DNS：DNS（Domain Name System，域名系统），因特网上作为域名和IP
 使用户更方便的访问互联网，而不用去记住能够被机器直接读取的IP数串。通过主机名，最终得到该主机名对应的IP地址的过程叫做域名解析（或主机名解析）。DNS协议运行在UDP协议之上，使用端口号53。在RFC文档中RFC 2181对DNS有规范说明，RFC 2136对DNS的动态更新进行说明，RFC 2308对DNS查询的反向缓存进行说明。
 备注：以上内容都可以百度百科
 
-
-	6.3 RPM包管理-yum在线管理
+6.3 RPM包管理-yum在线管理
 	
-		6.3.1 IP地址配置和网络yum源
+6.3.1 IP地址配置和网络yum源
 A 设置IP地址
 a 使用setup工具，设置
    名称     eth0
@@ -1090,7 +1089,7 @@ gpgcheck	如果是1则代表RPM数字证书生效，如果是0则不生效
 gpgkey		数字证书的公钥文件保存位置，不用修改		
 
 
-		6.3.2 yum命令
+6.3.2 yum命令
 
 说明：yum中都是包名，包全名只在手工RPM管理才有；		
 A yum list 查询远程服务器中有哪个软件包可以安装；		
@@ -1128,13 +1127,16 @@ I 光盘yum源搭建步骤
 a 挂载光盘 mount /dev/cdrom /mnt/cdrom
 
 b 让网络yum源文件失效(通过改变文件后缀，让其无法识别)
+```shell script
 # cd /etc/yum.repos.d/
 # mv CentOS-Base.repo CentOS-Base.repo.bak
 # mv CentOS-Debuginfo.repo CentOS-Debuginfo.repo.bak
 # mv CentOS-fasttrack.repo CentOS-fasttrack.repo.bak
 # mv CentOS-Vault.repo CentOS-Vault.repo.bak
+```
 
 c 
+```shell script
 [c6-media]    
 name=CentOS-$releasever - Media
 baseurl=file:///mnt/cdrom						
@@ -1143,24 +1145,27 @@ baseurl=file:///mnt/cdrom
 gpgcheck=1
 enabled=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+```
 备注：baseurl地址为光盘挂载地址，并且把下面俩地址注释，将enabled值改为1；就完成了；
 
-	6.4 源码包管理
+6.4 源码包管理
 		
-		6.4.1 源码包和RPM包的区别
+6.4.1 源码包和RPM包的区别
 穿越：RPM包安装位置
+```
 /etc			配置文件安装目录
 /usr/bin		可执行的命令安装目录
 /usr/lib		程序所使用的函数库保存位置
 /usr/share/doc	基本的软件使用手册保存位置
-/usr/share/man	帮助文档保存位置		
+/usr/share/man	帮助文档保存位置	
+```
 
 源码包安装位置：一般在/usr/local/软件名/
 
 说明：由于安装位置不同带来的影响
 RPM包安装的服务可以使用系统服务管理命令(service)来管理，例如RPM包安装的Apache
 启动方式是：
-	/etc/rc.d/init.d/httpd start
+	`/etc/rc.d/init.d/httpd start`
 或者service httpd start	
 备注：service命令是red hat系列才有的命令
 备注2：这儿可以通过在主机浏览器中输入虚拟机IP来访问Apache，如果主机能ping通虚拟机，但是不能访问，就把Linux的防火墙关掉就行，service iptables stop
@@ -1168,9 +1173,10 @@ RPM包安装的服务可以使用系统服务管理命令(service)来管理，�
 备注：源码包安装的网页在/usr/local/apache2/htdocs/内
 
 备注3：源码包安装的服务则不能被服务管理命令管理，因为没有安装到默认的路径中，所以只能用绝对路径进行服务管理，如：
-	/usr/local/apache2/bin/apachectl start
+	`/usr/local/apache2/bin/apachectl start`
 	
-		6.4.2 源码包的安装过程
+
+6.4.2 源码包的安装过程
 A 安装准备
 a 安装c语言编译器（如：gcc,通过 rpm -q gcc查看是否安装，安装会显示包全名）
 b 下载源码包(http://mirror.bit.edu.cn/apache/httpd)
@@ -1185,23 +1191,23 @@ a 下载源码包
 b 解压下载的源码包
 c 进入解压缩目录
 
-D ./configure 软件配置与检查
+D `./configure` 软件配置与检查
 a 定义需要的功能选项(如：设置安装目录，代码 
-# ./configure --prefix=/usr/local/apache2 )
+`# ./configure --prefix=/usr/local/apache2 )`
 b 检测系统环境是否符合安装要求（如：检测gcc是否安装）
 c 把定义好的功能选项和检测系统环境的信息都写入Makefile文件（文件全名就是
 Makefile），用于后续的编辑；
 
-E # make				//编译（调用gcc，把源码包编译成机器语言），如果编译
+E `# make`				//编译（调用gcc，把源码包编译成机器语言），如果编译
 						出错，用 # make clean 即可清除安装产生的垃圾文件
-  # make install		//编译安装；
+  `# make install`		//编译安装；
   
 F 启动Apache
-  # /usr/local/apache2/bin/apachectl start
+  `# /usr/local/apache2/bin/apachectl start`
   
 备注：有些时候还是不能访问，可以尝试关闭防火墙：
-[root@localhost conf]# /etc/rc.d/init.d/iptables stop
-防火墙配置文件：/etc/sysconfig/iptables
+`[root@localhost conf]# /etc/rc.d/init.d/iptables stop`
+防火墙配置文件：`/etc/sysconfig/iptables`
 
   
 G 卸载：直接删除安装目录就行；
@@ -1212,19 +1218,19 @@ G 卸载：直接删除安装目录就行；
 安装出错以及解决方法：
 
 不知道这一步具体有没有作用(先别执行)：
-yum remove apr-util-devel apr apr-util-mysql apr-docs apr-devel apr-util apr-util-docs
+`yum remove apr-util-devel apr apr-util-mysql apr-docs apr-devel apr-util apr-util-docs`
 
 错误1 ：在步骤 D-a 中显示错误：
-错误信息：configure: error: APR not found. Please read the documentation
+错误信息：`configure: error: APR not found. Please read the documentation`
 解决方法：
 a 在http://apr.apache.org/download.cgi下载apr-1.5.2.tar.gz
 b 上传到/root目录下
-c #tar -zxf apr-1.5.2.tar.gz ,在/root下解压该文件，得到目录apr-1.5.2
+c `#tar -zxf apr-1.5.2.tar.gz` ,在/root下解压该文件，得到目录apr-1.5.2
 d 进入该目录
-e 输入命令：# ./configure --prefix=/usr/local/apr
+e 输入命令：`# ./configure --prefix=/usr/local/apr`
 f 可能会出现错误2
-g # make 
-h # make install 
+g `# make `
+h `# make install `
 i 进入正常安装(需看下面 5 注意)
 
  
@@ -1242,28 +1248,27 @@ d 保存退出
 解决方法：
 a 在http://apr.apache.org/download.cgi下载 apr-util-1.5.4.tar.gz
 b 上传到/root目录下
-c #tar -zxf apr-util-1.5.4.tar.gz ,在/root下解压该文件，
+c `#tar -zxf apr-util-1.5.4.tar.gz` ,在/root下解压该文件，
 得到目录apr-util-1.5.4
 d 进入该目录 #cd apr-util-1.5.4
 e 输入命令：# ./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr/bin/apr-1-config
-f # make && make install
+f `# make && make install`
 
 错误4：
 错误信息：configure: error: pcre-config for libpcre not found. PCRE is required and available from http://pcre.org/
 解决方法：
 a 在http://ftp.exim.llorien.org/pcre/下载pcre-6.5.tar.gz文件
-b [root@localhost ~]# tar -zxf pcre-6.5.tar.gz
-c [root@localhost ~]# cd pcre-6.5
-d [root@localhost pcre-6.5]# ./configure --prefix=/usr/local/pcre
-e [root@localhost pcre-6.5]# make && make install
+b `[root@localhost ~]# tar -zxf pcre-6.5.tar.gz`
+c `[root@localhost ~]# cd pcre-6.5`
+d `[root@localhost pcre-6.5]# ./configure --prefix=/usr/local/pcre`
+e `[root@localhost pcre-6.5]# make && make install`
 
 5 注意：解决错误后不再是采用D-a中代码，而是
-# ./configure --prefix=/usr/local/apache2 --with-apr=/usr/local/apr/ --with-apr-util=/usr/local/apr-util/ --with-pcre=/usr/local/pcre
+`# ./configure --prefix=/usr/local/apache2 --with-apr=/usr/local/apr/ --with-apr-util=/usr/local/apr-util/ --with-pcre=/usr/local/pcre`
 备注：错误1出现加第一个with，错误3出现加第二个with，错误4出现加第三个with
 
 备注：草泥马，干你娘，好像httpd-2.2.29.tar.gz可以安装，而httpd-2.4.12.tar.gz不能在虚拟机上安装；
 
-	6.5 脚本安装包
 说明：
 a	脚本安装包并不是独立的软件包类型，常见安装的是源码包
 b 	是人为的把安装过程写成了自动安装的脚本，只要执行脚本，定义简单的参数，就可
@@ -1287,9 +1292,9 @@ c 执行安装脚本
 
 7 用户和用户组管理
 	
-	7.1 用户配置文件
+7.1 用户配置文件
 	
-		7.1.1 用户信息文件 /etc/passwd
+7.1.1 用户信息文件 /etc/passwd
 A /etc/passwd
 备注：用vim /etc/passwd 进入文件；用man 5 passwd 查看帮助信息；
 内容解析：
@@ -1317,7 +1322,7 @@ shell：Linux的命令解释器，在/etc/passwd当中，除了标准的Shell是
 
 		
 
-	7.1.2 影子文件/etc/shadow
+7.1.2 影子文件/etc/shadow
 文件内容部分：
 root:$6$b.ett8MQ$VuIGRSjH3xUeibzmZRnCJFuT/yF4ZvLaWLLCZVkQ4liCDvR2JVYOilm.b.firtWKR35Hh27dW8uQJjL9M92Na0:16583:0:99999:7:::
 第一字段：用户名
@@ -1332,11 +1337,11 @@ root:$6$b.ett8MQ$VuIGRSjH3xUeibzmZRnCJFuT/yF4ZvLaWLLCZVkQ4liCDvR2JVYOilm.b.firtW
 
 备注：
 时间戳换算成人类识别时间
-# date -d '1970-01-01 16666 days'
+`# date -d '1970-01-01 16666 days'`
 将日期换算为时间戳
-# echo $(($(date --date="2014/01/06" +%s)/86400+1)) 
+`# echo $(($(date --date="2014/01/06" +%s)/86400+1)) `
 		
-		7.1.3 组信息文件/etc/group和组密码文件/ect/gshadow
+7.1.3 组信息文件/etc/group和组密码文件/ect/gshadow
 A 组信息文件/etc/group
 部分内容：
 root:x:0:lydia
@@ -1354,7 +1359,7 @@ root:::lydia
 第三字段：组管理员用户名
 第四字段：组中附加用户
 	
-	7.2 用户管理相关文件
+7.2 用户管理相关文件
 A 用户家目录
 a 普通用户：/home/用户名/，所有者和所属组都是此用户，权限是700
 b 超级用户：/root/,所有者和所属组都是root用户，权限时550	
@@ -1364,16 +1369,19 @@ B 用户邮箱：/var/spool/mail/用户名/
 C 用户模板目录	/etc/skel/
 作用：在该目录下的文件，会在创建用户时	，直接复制到该用户的家目录下；
 例：
+```shell script
 [root@localhost ~]# cd /etc/skel
 [root@localhost skel]# vim warning.txt
 [root@localhost skel]# useradd user1
 [root@localhost skel]# passwd					//设置密码
 [root@localhost skel]# cd /home/user1
-备注：就会显示 warning.txt
+```
+
+备注：就会显示` warning.txt`
 
     
 
-	7.3 用户的管理命令
+7.3 用户的管理命令
 A 命令：useradd [选项] 用户名
 				-u UID			手工指定用户的UID号
 				-d 家目录		手工指定用户的家目录
@@ -1383,10 +1391,13 @@ A 命令：useradd [选项] 用户名
 				-s shell		手工指定用户的登录shell，默认为/bin/bash
 功能：添加新用户
 例：
+```shell script
 [root@localhost user1]# useradd -u 666 -d /lydia -c "这是一个测试用户" -G root,bin -s /bin/bash lydia
 [root@localhost user1]# grep lydia /etc/passwd
 
 lydia:x:666:666:这是一个测试用户:/lydia:/bin/bash
+```
+
 
 B 命令：passwd [选项] 用户名
 			    -S			查询用户密码的密码状态，仅root用户可用
@@ -1394,13 +1405,15 @@ B 命令：passwd [选项] 用户名
 				-u			解锁用户，仅root用户可用
 				--stdin		可以通过管道符输出的数据作为用户的密码
 功能：设置密码		
-例：passwd username
+例：`passwd username`
 备注：超级用户可以passwd username 而普通用户只需输入passwd直接回车即可
 例：
+```shell script
 [root@localhost ~]# passwd -S lydia
 lydia LK 2015-05-28 0 99999 7 -1 (密码已被锁定。)
+```
 例：
-[root@localhost ~]# echo '123' | passwd --stdin lydia
+`[root@localhost ~]# echo '123' | passwd --stdin lydia`
 备注：管道符作用是将第一个输出结果作为第二个的操作对象；
 
 
@@ -1426,10 +1439,10 @@ D 命令：chage [选项] 用户名
 				-I 天数		密码过期后宽限天数(字段)
 				-E 日期		账号失效时间(8字段)
 重要例子：				
-例：chage -d 0 lydia		//该命令作用是把密码修改日期设为0，这样用户一登录就要
+例：`chage -d 0 lydia	`	//该命令作用是把密码修改日期设为0，这样用户一登录就要
 						求改密码（这个很重要）
 
-E 命令：userdel [-r] 用户名
+E 命令：`userdel [-r] 用户名`
 				-r 			删除用户的同时删除用户的家目录
 
 功能：删除用户
@@ -1444,12 +1457,15 @@ G 命令：su [选项] 用户名
 			 -c 		仅执行一次命令，而不切换用户身份
 功能：切换用户	
 例：
+```shell script
 [root@localhost ~]# su - lydia			//root用户切换成普通用户不需要密码
+```
 例：
-[lydia@localhost ~]$ su - root -c "useradd haha"	//该例作用是普通用户
+`[lydia@localhost ~]$ su - root -c "useradd haha"`	//该例作用是普通用户
 利用root用户执行一条只有root才能执行的命令，引号中为命令；
 
 H 添加默认用户操作，影响到的文件
+```shell script
 [root@localhost user1]# useradd hehe
 [root@localhost user1]# grep hehe /etc/passwd
 [root@localhost user1]# grep hehe /etc/shadow
@@ -1457,9 +1473,12 @@ H 添加默认用户操作，影响到的文件
 [root@localhost user1]# grep hehe /etc/gshadow
 [root@localhost ~]# ll -d /home/hehe
 [root@localhost ~]# ll /var/spool/mail/hehe
+```
+
 
 
 I 用户默认文件	/etc/default/useradd
+```shell script
 GROUP=100				#用户默认组
 HOME=/home				#用户家目录
 INACTIVE=-1				#密码过期宽限天数(shadow文件7字段)
@@ -1467,8 +1486,10 @@ EXPIRE=					#密码失效时间(8，没有表示永久不失效)
 SHELL=/bin/bash			#默认shell
 SKEL=/etc/skel			#模板目录
 CREATE_MAIL_SPOOL=yes	#是否建立邮箱
+```
 
 J 另一个默认文件 /etc/login.defs
+```shell script
 PASS_MAX_DAYS 99999		#密码有效期(5)
 PASS_MIN_DAYS 0 		#密码修改间隔(4)
 PASS_MIN_LEN  5			#密码最小位数(显示采用PAM，最小是8位)
@@ -1476,20 +1497,22 @@ PASS_WARN_AGE 7			#密码到期警告(6)
 UID_MIN		  500		#最小和最大的UID范围
 GID			  60000		#用户初始组最大值
 ENCRYPT_METHOD SHA512	#加密方式
+```
+
 
 	
 	7.4 用户组管理命令
-A 命令：groupadd [选项] 组名
+A 命令：`groupadd [选项] 组名`
 				 -g GID			指定组ID
 功能：添加新组
-例：[root@localhost ~]# groupadd test_group		//添加新组
-例：[root@localhost ~]# groupadd -g 888 test2	//设置新组的GID为888；				 
+例：`[root@localhost ~]# groupadd test_group`		//添加新组
+例：`[root@localhost ~]# groupadd -g 888 test2`	//设置新组的GID为888；				 
 
 B 命令：groupmod [选项] 新组名 旧组名
 				 -g GID			修改组ID
 				 -n 新组名		修改组名
 功能：修改组的信息
-例：[root@localhost ~]# groupmod -n new_group test_group
+例：`[root@localhost ~]# groupmod -n new_group test_group`
 
 备注：修改用户和组名，涉及到其他的很多信息，尽量别修改，如果要换用户的组，还不如直接新建一个；
 
@@ -1501,8 +1524,8 @@ D 命令：gpasswd 选项 组名
 				-a 用户名		把用户加入组
 				-d 用户名		把用户从组中删除
 功能：给用户添加附加组
-例：[root@localhost ~]# gpasswd -a lydia root	//给lydia用户添加root组
-例：[root@localhost ~]# gpasswd -d lydia root	//给lydia用户删除root组
+例：`[root@localhost ~]# gpasswd -a lydia root`	//给lydia用户添加root组
+例：`[root@localhost ~]# gpasswd -d lydia root`	//给lydia用户删除root组
 
 穿越：# df -h		//作用查看分区使用情况；
 
@@ -1510,26 +1533,26 @@ D 命令：gpasswd 选项 组名
 
 8 权限管理
 
-	8.1 ACL权限
+8.1 ACL权限
 	
-		8.1.1 ACL权限简介与开启
+8.1.1 ACL权限简介与开启
 
 说明：ACL权限主要是解决所有者、所属组和其他人角色不够的情况下，给具体的用户分配某目录或文件的相应权限（主角是目录或者文件，即目录或文件允许用户或组对自身有什么权限）		
 A 查看分区ACL权限是否开启（其实默认就是开启的）
-[root@localhost ~]# dumpe2fs -h /dev/sda1
+`[root@localhost ~]# dumpe2fs -h /dev/sda1`
 							 -h	仅显示超级块中信息，不显示磁盘块组的详细信息
 功能：查询指定分区详细文件系统信息的命令选项
-内容：Default mount options:    user_xattr acl	//说明开启
+内容：`Default mount options:    user_xattr acl`	//说明开启
 
 B 临时开启分区ACL权限
-语法：[root@localhost ~]# mount -o remount,acl /
+语法：`[root@localhost ~]# mount -o remount,acl /`
 功能：重新挂载分区，并加入ACL权限（重启系统，将无效）；
 
 C 永久开启分区ACL权限
-a [root@localhost ~]# vim /etc/fstab 
-b UUID=fac6b26e-b796-45bf-b2a6-ce8a2b41a04e /                       ext4    defaults        1 1
+a `[root@localhost ~]# vim /etc/fstab `
+b `UUID=fac6b26e-b796-45bf-b2a6-ce8a2b41a04e /  `                     ext4    defaults        1 1
 备注：在要添加ACL权限的分区所在的行 defaults更改为defaults,acl
-c [root@localhost ~]# mount -o remount /
+c `[root@localhost ~]# mount -o remount /`
 备注：重新挂载文件系统或重启系统，使修改生效；
 							 
 									
@@ -1547,11 +1570,12 @@ B 命令：setfacl 选项 文件名
 				-k			删除默认的ACL权限
 				-R			递归设定ACL权限
 功能：设置目录或文件给用户和组设置acl权限
-例：[root@localhost tmp]# setfacl -m u:test:rx project
+例：`[root@localhost tmp]# setfacl -m u:test:rx project`
 备注：u:test:rx中u是代表为用户设置acl权限，test表示用户名，rx代表权限
 例：
 				
 C 为具体用户创建ACL权限
+```shell script
 [root@localhost ~]# mkdir /tmp/project			//创建project目录
 [root@localhost ~]# useradd student_1
 [root@localhost ~]# passwd						
@@ -1566,18 +1590,24 @@ C 为具体用户创建ACL权限
 [root@localhost tmp]# useradd test
 [root@localhost tmp]# passwd					//添加一个测试用户（只分配读和执行权限）
 [root@localhost tmp]# setfacl -m u:test:rx project//为具体用户设置具体权限
+```
+
 备注：查看目录信息（可以看出权限后有+，表示设置ACL权限成功）
 信息：drwxrwx---+ 2 root student_group   4096 5月  29 00:43 project		
 备注：切换到test用户，测试用户在/tmp/project中的权限
+```shell script
 [root@localhost tmp]# su - test
 [test@localhost ~]$ cd /tmp/project
 [test@localhost project]$ touch test.txt
+```
 touch: 无法创建"test.txt": 权限不够
 
 D 为组设置ACL权限
+```shell script
 [root@localhost tmp]# groupadd test_group
 [root@localhost tmp]# setfacl -m g:test_group:rx project
 [root@localhost tmp]# getfacl test_group
+```
 
 	
 				
@@ -1586,45 +1616,45 @@ A 用户的真实得到的权限：由最大有效权限mask与指定的ACL权�
 备注：'相与'例子：mask中有r权限，指定有r权限，则用户真实权限有r，其余情况用户真实权限没有r；
 		
 B 修改最大有效权限
-代码：[root@localhost ~]# setfacl -m m:rx /tmp/project
+代码：`[root@localhost ~]# setfacl -m m:rx /tmp/project`
 备注：修改最大有效权限为rx；
 
 
 C 删除ACL权限
 a 删除指定用户ACL权限
 语法：setfacl -x u:用户名 文件名	
-例：[root@localhost ~]# setfacl -x u:test /tmp/project
+例：`[root@localhost ~]# setfacl -x u:test /tmp/project`
 
 b 删除指定组ACL权限
 语法：setfacl -x g:组名 文件名
-例:[root@localhost ~]# setfacl -x g:test_group /tmp/project
+例:`[root@localhost ~]# setfacl -x g:test_group /tmp/project`
 
 c 删除文件的所有ACL权限
 语法：setfacl -b 文件名
-例：[root@localhost ~]# setfacl -b /tmp/project/
+例：`[root@localhost ~]# setfacl -b /tmp/project/`
 		
-		8.1.4 默认ACL权限与递归ACL权限
+8.1.4 默认ACL权限与递归ACL权限
 		
 A 递归ACL权限（只针对现有子目录）
 a 递归是父目录在设定ACL权限时，所有 现有 的子文件和子目录也会拥有相同的ACL
 权限。
 设置递归ACL权限语法：
-# setfacl -m u:用户名:权限 -R 文件名(即目录)
+`# setfacl -m u:用户名:权限 -R 文件名(即目录)`
 备注：-R只能在那个位置；
-例：[root@localhost project]# setfacl -m u:test:rx -R /tmp/project/
+例：`[root@localhost project]# setfacl -m u:test:rx -R /tmp/project/`
 
 B 默认ACL权限（只针对新建子目录）
 a 默认ACL权限作用是如果给父目录设定了ACL权限，那么父目录中所有 新建 的子文件
 都会继承父目录的ACL权限
 语法：setfacl -m d:u:用户名:权限 文件名
-例1：[root@localhost project]# setfacl -m d:u:test:rx -R /tmp/project/
-例2：[root@localhost project]# setfacl -m d:u:test:rx /tmp/project/
+例1：`[root@localhost project]# setfacl -m d:u:test:rx -R /tmp/project/`
+例2：`[root@localhost project]# setfacl -m d:u:test:rx /tmp/project/`
 备注：例1中虽然有递归，但是也是对新建子目录才有效；
 
 
-	8.2 文件特殊权限
+8.2 文件特殊权限
 
-		8.2.1 SetUID
+8.2.1 SetUID
 		
 A SetUID 功能
 a 只有可执行的二进制程序才能设定SUID权限
@@ -1656,7 +1686,7 @@ b 用户的密码设置要严格遵守密码三原则
 c 对系统中默认应该具有SetUID权限的文件做一列表，定时检查有没有这之外的文件被
 设置了SetUID权限；
 		
-		8.2.2 SetGID
+8.2.2 SetGID
 
 A SetGID 针对文件的作用
 a 只有可执行的二进制程序才能设置SGID权限
@@ -1664,10 +1694,10 @@ b 命令执行者要对该程序有x(执行)权限
 c 命令执行时，执行者的组身份升级为该程序文件的所属组
 d SetGID权限同样只在该程序执行过程中有效；
 用处不多，例子：
-[root@localhost tmp]# ll /usr/bin/locate
+`[root@localhost tmp]# ll /usr/bin/locate`
 -rwx--s--x. 1 root slocate 35548 10月 10 2012 /usr/bin/locate
 
-[root@localhost tmp]# ll /var/lib/mlocate/mlocate.db
+`[root@localhost tmp]# ll /var/lib/mlocate/mlocate.db`
 -rw-r-----. 1 root slocate 1707172 5月  29 03:34 /var/lib/mlocate/mlocate.db	
 备注：locate命令实际上搜索mlocate.db，而普通用户是没有r读权限的，真实原理是普通用户执行locate命令，所属组升级为slocate，而mlocate.db的所属组就是slocate，所以普通用户可以查看mlocate.db中的内容了；
 
@@ -1685,7 +1715,7 @@ D 取消SetGID
 语法1：chmod 755 文件名
 语法2：chmod g-s 文件名
 
-		8.2.3 L文件特殊权限-Sticky BIT
+8.2.3 L文件特殊权限-Sticky BIT
 		
 A SBIT粘着位作用
 a 粘着位目前只对目录有效
@@ -1693,7 +1723,7 @@ b 普通用户对该目录拥有w和x权限，即普通用户可以在此目录�
 c 如果没有粘着位，因为普通用户拥有w权限，所以可以删除此目录下所有文件，包括其他
 用户建立的文件。一旦赋予的粘着位，除了root可以删除所有文件，其余普通用户就算拥有w权限，也只能删除自己建立的文件，但是不能删除其他用户建立的文件
 例：
-[root@localhost ~]# ll -d /tmp
+`[root@localhost ~]# ll -d /tmp`
 drwxrwxrwt. 5 root root 4096 5月  29 06:13 /tmp
 备注：可以看出其他人权限t，就是SBIT权限标志
 
@@ -1722,8 +1752,8 @@ A 命令：chattr
 		许删除；
 备注：为文件或目录设置chattr权限；		
 		
-例：[root@localhost tmp]# chattr +i /test		//针对root用户也有效
-例2：[root@localhost tmp]# chattr -i /test	//删除i属性后可以更改了；	
+例：`[root@localhost tmp]# chattr +i /test`		//针对root用户也有效
+例2：`[root@localhost tmp]# chattr -i /test`	//删除i属性后可以更改了；	
 
 B 命令：lsattr
 语法：lsattr 选项 文件名
@@ -1739,7 +1769,7 @@ a root把本来只能超级用户执行的命令赋予普通用户执行
 b sudo操作的对象是系统命令
 
 B sudo使用
-语法：[root@localhost tmp]# visudo
+语法：`[root@localhost tmp]# visudo`
 备注：上面语法也是例子，实际修改的是/etc/sudoers文件
 文件中有使用sudo例子：
 root    ALL=(ALL)       ALL					//98行
@@ -1750,16 +1780,20 @@ root    ALL=(ALL)       ALL					//98行
 例：（在/etc/sudoers文件中照着上面写）
 lydia	192.168.1.250= /sbin/shutdown -r now
 备注：命令可以限制具体一些，那么被赋予用户权限小一些；
-
+```shell script
 # %wheel        ALL=(ALL)       ALL
 # %组名			...(与上面相同)
+```
+
 
 C 普通用户执行sudo赋予命令
+```shell script
 [root@localhost ~]# su - lydia			//转换为普通用户
 [lydia@localhost ~]$ sudo -l			//查看该普通用户被赋予可执行哪些命令
 										(不过要先输入该用户密码)
 [lydia@localhost ~]$ sudo /sbin/shutdown -r now	//普通用户用sudo命令执行被赋予可执行的命令（其实这是就是用户升级为root执行该命令，前面位置3中声明的），如果直接执行命令，则还是该用户身份；
 
+```
 千万注意：不要把/usr/bin/vim等编辑命令赋予普通用户，因为那样普通用户将借助vim命令可以任何文件；
 
 权限总结：
@@ -1777,7 +1811,7 @@ C 普通用户执行sudo赋予命令
 
 9 文件系统管理
 	
-	9.1 回顾分区和文件系统
+9.1 回顾分区和文件系统
 	
 A 分区类型
 a 主分区：总共最多只能分4个
@@ -1799,9 +1833,9 @@ a 现在CentOS6以后采用ext4:它是ext3的升级版本；ext4在性能、伸�
 面进行了大量的改进；最大支持1EB文件系统和16TB文件、无限数量子目录等等；
 格式化：就是在小分区中打入隔断，其实就是写入文件系统；	
 	
-	9.2 文件系统常用命令
+9.2 文件系统常用命令
 			
-		9.2.1 df命令、du命令、fsck命令和dump2fs命令
+9.2.1 df命令、du命令、fsck命令和dump2fs命令
 		
 A 命令：df [选项] [挂载点]		
 		  -a 			显示所有文件系统信息，包括特殊文件系统，如/proc,
@@ -1813,12 +1847,12 @@ A 命令：df [选项] [挂载点]
 功能：查看分区使用情况(挂载点可以省略，即查看全部)
 例：[root@localhost ~]# df -h
 
-B 命令：du [选项] [目录或文件名]
+B 命令：`du [选项] [目录或文件名]`
 			-a 		显示每个子文件的磁盘占用量，默认只统计子目录的磁盘占用量
 			-h		使用习惯单位显示磁盘占用量，如KB、MB、GB等
 			-s		统计总占用量，而不列出子目录和子文件的占用量
 功能：统计目录或文件大小（其实统计文件常用ls）		  
-例：[root@localhost ~]# du -sh
+例：`[root@localhost ~]# du -sh`
 备注：du命令和df命令的区别
 df命令是从文件系统考虑的，不光要考虑文件占用的空间，还要统计被命令或程序占用的空间（最常见的就是文件已经删除，但程序并没有释放空间，也就是说df命令统计的更准确）
 du命令是面向文件的，只会计算文件或目录占用的空间；
@@ -1831,7 +1865,7 @@ C 命令：fsck [选项] 分区设备文件名
 
 D 命令：dumpe2fs 分区设备名
 功能：显示磁盘状态
-功能：[root@localhost ~]# dumpe2fs /dev/sda5
+功能：`[root@localhost ~]# dumpe2fs /dev/sda5`
 		
 		9.2.2挂载命令
 A 命令：mount [-l]		
@@ -1856,18 +1890,18 @@ remount			重新挂载已经挂载的文件系统，一般用于指定修改特�
 
 		9.2.3 挂载光盘和U盘
 A 挂载光盘
-a [root@localhost mnt]# mkdir cdrom		//建立挂载点
+a `[root@localhost mnt]# mkdir cdrom`		//建立挂载点
 b 将光盘放入光驱
-c [root@localhost mnt]# mount -t iso9660 /dev/cdrom /mnt/cdrom/ //挂载光盘
+c `[root@localhost mnt]# mount -t iso9660 /dev/cdrom /mnt/cdrom/` //挂载光盘
 
 B 卸载命令
 a 语法：umount 设备文件名或卸载点
-例：	[root@localhost ~]# umount /mnt/cdrom
+例：	`[root@localhost ~]# umount /mnt/cdrom`
 注意：卸载挂载点，必须要先退出挂载点目录；		
 
 C 挂载U盘
 a 先进入虚拟机，再插入u盘(不然u盘是被windows识别)
-b [root@localhost ~]# fdisk -l			//查看U盘设备文件名
+b `[root@localhost ~]# fdisk -l`			//查看U盘设备文件名
 内容：
 Disk /dev/sdb: 15.5 GB, 15538716672 bytes
 68 heads, 4 sectors/track, 111577 cylinders
@@ -1880,7 +1914,7 @@ Disk identifier: 0xa2560c90
 /dev/sdb1              30      111578    15170496    c  W95 FAT32 (LBA)
 这里是设备文件名										FAT32挂载时要用-t vfat
 
-d [root@localhost ~]# mount -t vfat /dev/sdb1 /mnt/usb   //挂载
+d `[root@localhost ~]# mount -t vfat /dev/sdb1 /mnt/usb`   //挂载
 注意:Linux中把FAT16分区识别为fat ，把FAT32识别为vfat，fat和vfat是针对-t选项
 注意2：Linux默认不支持NTFS文件系统（形式的硬或U盘）
 
@@ -1897,9 +1931,9 @@ e # make install			//编译安装
 
 C #mount -t ntfs-3g 分区设备文件名 挂载点
 
-	9.3 fdisk分区
+9.3 fdisk分区
 	
-		9.3.1 fdisk命令分区过程
+9.3.1 fdisk命令分区过程
 A 添加新硬盘(需要关机才能添加，但是好像我的虚拟机要开启系统才行)		
 
 B 查看硬盘命令：fdisk -l 
@@ -1963,18 +1997,23 @@ Using default value 652
 Command (m for help): w
 	
 D 重新读取分区信息命令：partprobe
-例：[root@localhost ~]# partprobe
+例：`[root@localhost ~]# partprobe`
 备注：这个命令执行后会有警告，不用理会；
 
 E 格式化分区：
+```shell script
 [root@localhost ~]# mkfs -t ext4 /dev/sdb1
 [root@localhost ~]# mkfs -t ext4 /dev/sdb5
+```
 
 F 建立挂载点并挂载
+```shell script
 [root@localhost ~]# mkdir /mnt/sdb1
 [root@localhost ~]# mkdir /mnt/sdb5
 [root@localhost ~]# mount /dev/sdb1 /mnt/sdb1
 [root@localhost ~]# mount /dev/sdb5 /mnt/sdb5
+```
+
 
 备注：以上进行的分区挂载等，在重启之后有需要手动挂载；
 
@@ -2016,7 +2055,7 @@ buffer(缓冲)：是指在写入数据时，先把分散的写入操作保存到
 B 添加swap分区的详细步骤
 提示：开始之前可以通过# fdisk -l 查看分区以及剩余空间(空间不够，要先调整其他
 分区的空间，删除和调整都行)
-a 	[root@localhost ~]# fdisk /dev/sdb
+a 	`[root@localhost ~]# fdisk /dev/sdb`
 b 	
 Command (m for help): n					//新建分区
 Command action
@@ -2036,30 +2075,30 @@ Command (m for help): w					//保存退出
 The partition table has been altered!
 
 
-c [root@localhost ~]# partprobe
+c `[root@localhost ~]# partprobe`
 备注：partprobe可能没有生效，即输入后面格式化命令，提示找不到相对于目录，则需要重启系统；
 
 d 格式化
-[root@localhost ~]# mkswap /dev/sdb6
+`[root@localhost ~]# mkswap /dev/sdb6`
 
 f 加入swap分区
-[root@localhost ~]# swapon /dev/sdb6		//加入swap分区
-[root@localhost ~]# swapoff /dev/sdb6		//取消swap分区(在这个步骤中不执行)
+`[root@localhost ~]# swapon /dev/sdb6`		//加入swap分区
+`[root@localhost ~]# swapoff /dev/sdb6	`	//取消swap分区(在这个步骤中不执行)
 
 备注：如果是通过以上步骤把分区加入swap，需要每次开机后手工执行加入swap操作；
 显然我们需要自动加入swap，所以，在分好要加入swap的分区后，通过更改/etc/fstab来进行自动加入；
 
 C swap分区开机自动挂载
 前提：先要分配好要加入swap的分区
-a  	[root@localhost ~]# vim /etc/fstab
+a  	`[root@localhost ~]# vim /etc/fstab`
 b	输入内容:
 /dev/sdb6      swap         swap    defaults         0 0
-c	[root@localhost ~]# mount -a		//测试有没有把文件写错；
+c	`[root@localhost ~]# mount -a		//测试有没有把文件写错；
 
 
 10 Shell
 
-	10.1 Shell概述
+10.1 Shell概述
 A Shell是一个命令行解释器，它为用户提供一个向Linux内核发送请求以便运行程序的界
 面系统级程序，用户可以用Shell来启动、挂起、停止甚至是编写一些程序；	
 
@@ -2070,7 +2109,7 @@ C Shell有很多种，Linux采用Bash类型；在/etc/shells文件中可以查�
 shell
 
 	
-	10.2 Shell脚本执行方式
+10.2 Shell脚本执行方式
 	
 A 命令：echo [选项] [输出内容]
 			  -e			支持输出内容中反斜线控制的字符转换
@@ -2088,17 +2127,20 @@ A 命令：echo [选项] [输出内容]
 \0nnn				按照八进制ASCII码表输出字符。其中0为数字0，nnn是三位
 					八进制数			  
 \xhh				按照十六进制ASCII码表输出字符，其中hh是两位二进制数
-例：[root@localhost sh]# echo -e 'a\tb'
-例2：[root@localhost sh]# echo -e '\e[1;31m hehe\e[0m'	
+例：`[root@localhost sh]# echo -e 'a\tb'`
+例2：`[root@localhost sh]# echo -e '\e[1;31m hehe\e[0m'	`
 备注：例2输出红颜色字体hehe， 注意 \e[1; 和 \e[0m开启和关闭颜色标记
 30m = 黑色，31m = 红色，32m=绿色 ，33m=黄色
 34m = 蓝色，35m = 洋红，36m=青色 ，37m=白色
 	
 B 第一个脚本
+```shell script
 #!/bin/bash							//这里不是注释，而是shell脚本标记；
 #writer:neo 
 #2015年 05月 29日 星期五 15:28:33 CST
 echo 'hello world'
+```
+
 
 C 脚本执行
 方式一：赋予执行权限，直接执行；(采用)
@@ -2111,13 +2153,13 @@ bash hello.sh
 D 命令：dos2unix 文件名
 功能：将文件由windows格式转化为Linux下文本编辑格式；
 备注：该命令有些Linux系统没有安装，可以通过命令：
-[root@localhost ~]# yum -y install dos2unix
+`[root@localhost ~]# yum -y install dos2unix`
 备注：当然unix2dos命令也同理；
 
 
-	10.3 Bash的基本功能
+10.3 Bash的基本功能
 		
-		10.3.1 历史命令和命令补全
+10.3.1 历史命令和命令补全
 A 历史命令：history [选项] [历史命令保存文件]
 					-c			清空历史命令，只会清除内存中的历史命令；
 					-w			把缓存中的历史命令写入历史命令保存文件：
@@ -2131,7 +2173,7 @@ a 使用上、下箭头调用以前的命令
 b 使用'!n'重复执行第n条历史命令
 c 使用'!!'重复执行上一条历史命令
 d 使用'!字串'重复执行最后一条以该字串开头的命令
-例：[root@localhost ~]# !vi
+例：`[root@localhost ~]# !vi
 
 B 命令与文件补全
 在Bash中，命令与文件补全是非常方便与常用的功能，我们只要在输入命令或文件时，按
@@ -2142,9 +2184,9 @@ B 命令与文件补全
 		
 A 命令别名：alias 别名='原命令'		
 功能：设定命令别名
-例： alias mv='mv -i'
+例： `alias mv='mv -i'`
 
-B 命令：alias
+B 命令：`alias`
 功能：查询命令别名
 
 C 命令优先级
@@ -2196,8 +2238,8 @@ B 输出重定向
 输出重定									
 向			错误命令 2>> 文件	以追加的方式，把命令的错误输出输出到指定的文件或
 								设备当中
-例：[root@localhost ~]# ls >>test.txt			//test.txt不存在会自动创建；
-例：[root@localhost ~]# ls2 2>>error.txt			//把错误输出加入error.txt文件中
+例：`[root@localhost ~]# ls >>test.txt`			//test.txt不存在会自动创建；
+例：`[root@localhost ~]# ls2 2>>error.txt`			//把错误输出加入error.txt文件中
 
 
 C 将正确和错误输出加入同一文件
@@ -2216,7 +2258,7 @@ C 将正确和错误输出加入同一文件
 									
 			命令>>文件1 2>>文件2		把正确的输出追加到文件一，把错误的输出追加到
 									文件2(常用)
-例：[root@localhost ~]# ls &>>test.txt
+例：`[root@localhost ~]# ls &>>test.txt`
 
 D 输入重定向（用的不多）
 举例命令：wc [选项] [文件名]
@@ -2237,7 +2279,7 @@ A 多命令顺序执行
 											当命令1执行不正确，则命令2不执行
 	||		 命令1 || 命令2			逻辑或  当命令1执行不正确，则命令2执行
 											当命令1执行正确，则命令2不执行
-例：# ./configure && make && make install
+例：`# ./configure && make && make install`
 备注：判断命令是否正确执行：命令 && echo yes || echo no
 
 恶补：
@@ -2246,12 +2288,12 @@ A 多命令顺序执行
 		of=输出文件		指定目标文件或目标设备
 		bs=字节数		指定一次输入/输出字节，即把这些字节看成一个数据块
 		count=个数		指定输入或输出多少个数据块
-例：[root@localhost ~]# date;dd if=/dev/zero of=/root/testfile bs=1k count=100000;date			//这条代码作用是创建一个100MB文件需要多少时间
+例：`[root@localhost ~]# date;dd if=/dev/zero of=/root/testfile bs=1k count=100000;date`			//这条代码作用是创建一个100MB文件需要多少时间
 
 B 管道符
 a 命令格式：命令1 | 命令2
 功能：命令1的正确输出，作为命令2的操作对象；
-例：[root@localhost ~]# ll -a /etc | less	//ll命令结果作为less的操作对象；
+例：`[root@localhost ~]# ll -a /etc | less`	//ll命令结果作为less的操作对象；
 
 b 恶补命令：grep [选项] '搜索内容' 文件名
 				 -i				忽略大小写
@@ -2259,13 +2301,13 @@ b 恶补命令：grep [选项] '搜索内容' 文件名
 				 -v				反向查找
 				 --color=auto	搜索出的关键字特殊颜色标记
 功能：显示搜索到的行；
-例：[root@localhost ~]# grep -n --color=auto 'root' /etc/passwd	//在/etc/passwd中搜索root并显示其所有在行用特殊颜色显示；
+例：`[root@localhost ~]# grep -n --color=auto 'root' /etc/passwd`	//在/etc/passwd中搜索root并显示其所有在行用特殊颜色显示；
 
 配合管道符例子：
 例：netstat -an | grep 'ESTABLISHED'		//作用：显示远程连接
 
 
-		10.3.5 通配符与其他特殊符号
+10.3.5 通配符与其他特殊符号
 		
 A 通配符：匹配文件名的；
 通配符			作用
@@ -2278,7 +2320,7 @@ A 通配符：匹配文件名的；
 [^]			逻辑非，表示匹配不是中括号内的一个字符，例如：[^0-9]代表匹配一个不是
 			数字的字符
 			
-例：rm -fr /tmp/*			//删除除隐藏文件外的所有文件；			
+例：`rm -fr /tmp/*	`		//删除除隐藏文件外的所有文件；			
  
 B bash中其他特殊符号
 符号				作用
@@ -2298,15 +2340,18 @@ B bash中其他特殊符号
  
  \			转义符，在跟\之后的特殊符号将失去特殊含义，变为普通字符，如\$；
 例：
+```shell script
 [root@localhost ~]# name=neo 			//给变量name赋值，注意变量和值要紧挨着=
 [root@localhost ~]# echo $name
 [root@localhost ~]# echo "$name is a man" //输出：neo is a man
 [root@localhost ~]# echo "$(date)"		//输出：时间值
+```
 
 
-	10.4 Bash的变量
+
+10.4 Bash的变量
 	
-		10.4.1 用户自定义变量
+10.4.1 用户自定义变量
 				
 A 说明
 a 在bash中变量默认为字符串型，如果要进行数值运算，则必须指定变量类型为数值型	
@@ -2316,8 +2361,8 @@ d 如果需要增加变量的值，可以进行变量叠加，不过变量名需
   用${变量}包含
 e 如果是把命令的结果作为值赋值给变量，则需要使用反引号或$()包含命令
 f 环境变量名建议大写，便于区分；
-例：[root@localhost ~]# name=${name}1234
-[root@localhost ~]# echo $name
+例：`[root@localhost ~]# name=${name}1234`
+`[root@localhost ~]# echo $name`
 2015年 05月 29日 星期五 19:49:08 CST1234
 
 B 变量分类
@@ -2330,11 +2375,11 @@ d 预定义变量：在bash中已经定义好的变量，变量名不能自定�
 恶补：
 命令:set 		
 功能：查看系统中所有变量(包含以上四种变量)
-例：[root@localhost ~]# set
+例：`[root@localhost ~]# set`
 
 命令:unset 变量名
 功能：删除变量
-例：[root@localhost ~]# unset name
+例：`[root@localhost ~]# unset name`
 
 		
 10.4.2 环境变量
@@ -2358,8 +2403,10 @@ B 设置环境变量
 
 C 系统常见环境变量
 a PATH：系统查找命令的路径
+```shell script
 [root@localhost ~]# echo $PATH
 /usr/lib/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+```
 
 备注：即我们输入命令时，之所以不用输入路径，是因为去了以上目录的搜索匹配执行文件，然后执行；我们也可以将执行文件复制到上面目录中，也可以像命令一样执行执行文件了；
 
@@ -2396,6 +2443,7 @@ A 位置参数变量
  $#					这个变量代表命令行中所有参数的个数
 
 例：
+```shell script
 #!/bin/bash
 #2015年 05月 29日 星期五 21:40:06 CST
 sum=$(($1+$2+$3+$4))			//注意等号两侧不能有空格；
@@ -2412,6 +2460,7 @@ for y in "$@"					//$*这儿一定要用双引号括起来才行(单引号都不
         done
 echo '************'
 echo $#  
+```
 执行结果：           
 [root@localhost sh]# ./test_weizhi.sh  1 2 3 4
 10
@@ -2434,15 +2483,18 @@ A 预定义变量
  
  $!			
  后台运行的最后一个进程的进程号(PID)
-例：[root@localhost sh]# echo $?
+例：`[root@localhost sh]# echo $?`
 0									//表示上一条命令正确执行
 例：
-[root@localhost sh]# vim test_yudingyi.sh
+`[root@localhost sh]# vim test_yudingyi.sh`
+```shell script
 #!/bin/bash
 echo "the current process is $$"		//当前的PID也就是该脚本本身运行时的PID
 echo "************"
 find /etc -name profile &				// &的作用：就是将命令放到后台执行
 echo "the last one Daemon process is $!"
+```
+
 
 B 接收键盘输入
 命令：read [选项] [变量名]
@@ -2454,6 +2506,7 @@ B 接收键盘输入
 			-s					隐藏输入数据(不再输入的屏幕上显示)
 功能：提示用户输入，把输入赋值到变量；			
 例：
+```shell script
 [root@localhost sh]# vim read.sh       
 #!/bin/bash
 read -p "enter your name: " name
@@ -2462,11 +2515,12 @@ read -s -p "enter your age:" age
 echo $age
 read -n 1 -s -p "enter your sex(B/G): " sex
 echo $sex
+```
 
 		
-	10.5 Bash的运算符
+10.5 Bash的运算符
 	
-		10.5.1 数值运算与运算符
+10.5.1 数值运算与运算符
 		
 A 命令：declare [+/-] [选项] 变量名
 				-			给变量设定类型属性
@@ -2479,24 +2533,31 @@ A 命令：declare [+/-] [选项] 变量名
 B 数值运算方法：
 a 方法一：declare			
 例：
+```shell script
 [root@localhost sh]# a=1
 [root@localhost sh]# b=2
 [root@localhost sh]# declare -i c=$a+$b			//步骤1
 [root@localhost sh]# echo $c
+```
 3
 备注：步骤1可以更改为：
+```shell script
 [root@localhost sh]# declare -i c
 [root@localhost sh]# c=$a+$b
+```
 
-例：[root@localhost sh]# declare +i c			//取消变量c的数值属性；
+例：`[root@localhost sh]# declare +i c`			//取消变量c的数值属性；
 
 b 方法二：expr或let数值运算工具
-[root@localhost sh]# e=$(expr $a + $b)			//符号+两侧必须有空格
+`[root@localhost sh]# e=$(expr $a + $b)`			//符号+两侧必须有空格
 
 c 方法三："$((运算式))"或"$[运算式]"      //采用
+```shell script
 [root@localhost sh]# a=1
 [root@localhost sh]# b=2
 [root@localhost sh]# echo $(($a+$b))			//符号+两侧就不严格要求空格与否
+```
+
 
 备注：$后面分析
 $变量			变量值
@@ -2521,15 +2582,15 @@ C 运算符
  2			||				逻辑或
  1			=、+=、-=、*=、/=、%=、&=、^=、|=、<<=、>>=		赋值、运算且赋值
 
-例： [root@localhost sh]# echo $(($a+$b*3))
+例： `[root@localhost sh]# echo $(($a+$b*3))`
 例2：
-[root@localhost sh]# echo $(( 1&&0 ))			//同时为1，则为1，其余为0
+`[root@localhost sh]# echo $(( 1&&0 ))`			//同时为1，则为1，其余为0
 0
-[root@localhost sh]# echo $(( 1&&1 ))			//当然||就相反了；
+`[root@localhost sh]# echo $(( 1&&1 ))`			//当然||就相反了；
 1
 
 
-		10.5.2 变量测试与内容替换
+10.5.2 变量测试与内容替换
 		
 A 变量置换表格(基本不咋用)
 变量置换方式			变量y没有设置		变量y为空值			变量y设置值
@@ -2546,6 +2607,7 @@ x=${y:?新值}			新值输出到标准		新值输出到标准		x=$y
 
 备注：
 例：
+```shell script
 [root@localhost ~]# unset y
 [root@localhost ~]# x=${y-345}
 [root@localhost ~]# echo $x
@@ -2553,13 +2615,15 @@ x=${y:?新值}			新值输出到标准		新值输出到标准		x=$y
 [root@localhost ~]# y=12
 [root@localhost ~]# x=${y-345}	
 [root@localhost ~]# echo $x
-12				
+12	
+```
+			
 		
 	
 	
-	10.6 环境变量配置文件
+10.6 环境变量配置文件
 		
-		10.6.1 环境变量配置文件简介
+10.6.1 环境变量配置文件简介
 A 命令：source 配置文件			
 功能：让单独配置文件重启(减少重启系统时间)		
 备注：source可以简写为 .   ,注意.和文件名的空格；
@@ -2568,17 +2632,19 @@ B 简介：环境变量配置文件中主要是定义对系统的操作环境生
 PATH、HISTSIZE、PSI、HOSTNAME等默认环境变量
 
 C 配置文件
+```shell script
 /etc/profile
 /etc/profile.d/*.sh
 /etc/bashrc
 ~/.bash_profile
 ~/.bashrc
+```
 备注：写在/etc目录下环境变量对所有用户生效；后两个在家目录中的文件只对自己用户生效；
 
 D 配置文件调用顺序
-a /etc/profile -> /etc/profile.d/*.sh -> /etc/profile.d/lang.sh -> /etc/sysconfig/i18n
+a `/etc/profile -> /etc/profile.d/*.sh -> /etc/profile.d/lang.sh -> /etc/sysconfig/i18n`
 
-b /etc/profile -> ~/.bash_profile -> ~/.bashrc -> /etc/bashrc（分支到：命令提示符） -> /etc/profile.d/*.sh -> /etc/profile.d/lang.sh -> /etc/sysconfig/i18n
+b `/etc/profile -> ~/.bash_profile -> ~/.bashrc -> /etc/bashrc（分支到：命令提示符） -> /etc/profile.d/*.sh -> /etc/profile.d/lang.sh -> /etc/sysconfig/i18n`
 
 备注：
 /etc/profile的作用：
@@ -2603,11 +2669,11 @@ b /etc/profile -> ~/.bash_profile -> ~/.bashrc -> /etc/bashrc（分支到：命�
 	调用/etc/profile.d/*.sh文件
 	
 
-		10.6.2 环境变量配置文件作用
+10.6.2 环境变量配置文件作用
 		
 查看上节配置文件就行	
 	
-		10.6.3 其他配置文件和登录信息
+10.6.3 其他配置文件和登录信息
 
 A 注销时生效的环境变量配置文件:~/.bash_logout
 
@@ -2646,7 +2712,7 @@ E 不管远程登录还是本地登录都有效的登录后信息配置文件:/e
 
 11 Shell编程
 
-	11.1 基础正则表达式
+11.1 基础正则表达式
 	
 A 正则表达式与通配符
 正则表达式用来在文件中匹配符合条件的字符串，正则是包含匹配。grep、awk、sed等命令可以支持正则表达式
@@ -2671,10 +2737,9 @@ B 基础正则表达式
 [root@localhost ~]# grep '10\{3\}' /etc/profile
 HISTSIZE=1000
 	
-	
-	11.2 字符截取命令
+11.2 字符截取命令
 
-		11.2.1 cut字段提取命令
+11.2.1 cut字段提取命令
 		
 命令：cut [选项] 文件名
 		   -f 列号			提取第几列
@@ -2686,7 +2751,7 @@ HISTSIZE=1000
 [root@localhost ~]# df -h | cut -d ' ' -f 5
 		   
 		
-		11.2.2 printf命令
+11.2.2 printf命令
 		
 A printf '输出类型输出格式' 输出内容
 			%ns				输出字符串。n是数字，代表最少输出几个字符，字串本身
@@ -2705,16 +2770,16 @@ A printf '输出类型输出格式' 输出内容
 
 功能：按格式输出	
 例：
-[root@localhost ~]# printf '%s %s %s\n' 12 23 34 45 56 67	
+`[root@localhost ~]# printf '%s %s %s\n' 12 23 34 45 56 67`	
 例：
-[root@localhost tmp]# printf "%s\t%s\t%s\n" $(cat /tmp/test.txt)
+`[root@localhost tmp]# printf "%s\t%s\t%s\n" $(cat /tmp/test.txt)`
 备注：printf不能接受管道符传递的数据，只能用这种；其实printf并不管原先数据采用什么符号分割，包括空格也一样；
 	
 备注2：在awk命令中支持printf和print命令
 print：会在每个输出后自动加入换行符(Linux中默认并没有print命令，只能在awk中使用)
 printf：不会自动加入换行符；
 
-		11.2.3 awk命令
+11.2.3 awk命令
 命令：awk '条件1{动作1}条件2{动作2}' 文件名	
 说明1：条件一般是关系表达式作为条件，如：x>10
 说明2：格式化输出、流程控制语言
@@ -2723,19 +2788,19 @@ printf：不会自动加入换行符；
 
 功能：字符串分割
 
-例：[root@localhost ~]# df -h | grep 'sda5' | awk '{printf $5 "\n"}' | cut -d "%" -f 1
+例：`[root@localhost ~]# df -h | grep 'sda5' | awk '{printf $5 "\n"}' | cut -d "%" -f 1`
 
 条件：BEGIN
 作用：在awk命令取值之前执行，只要配合FS
-[root@localhost ~]# df -h | grep 'sda5' | awk 'BEGIN{printf "this is begin\n"}{printf $5 "\n"}' | cut -d "%" -f 1
+`[root@localhost ~]# df -h | grep 'sda5' | awk 'BEGIN{printf "this is begin\n"}{printf $5 "\n"}' | cut -d "%" -f 1`
 备注：条件END用法一样；
 
 动作中：	FS内置变量
 作用：声明分隔符
-[root@localhost ~]# cat /etc/passwd | grep "/bin/bash" | awk 'BEGIN{FS=":"}{printf $1 "\t" $2 "\n"}'
-
+`[root@localhost ~]# cat /etc/passwd | grep "/bin/bash" | awk 'BEGIN{FS=":"}{printf $1 "\t" $2 "\n"}'
+`
 		
-		11.2.4 sed命令
+11.2.4 sed命令
 
 说明：sed是一种几乎包括在所有UNIX平台(包括Linux)的轻量级流编辑器。sed主要用来将数据进行选取、替换、删除、新增的命令
 
@@ -2765,12 +2830,15 @@ A 命令：sed [选项] '[动作]' 文件名			//动作一定要引号括起来
 					
 功能：主要用来将数据进行选取、替换、删除、新增的命令
 例：
+```shell script
 [root@localhost ~]# df -h | sed -n '2p'					//打印第2行
 [root@localhost ~]# df -h | sed -n '2,4p'				//打印2到4行
 [root@localhost ~]# df -h | sed '1a this is a test '	//在第1行后插入
 [root@localhost ~]# df -h | sed  "2i this is \n \
 a test"
 [root@localhost ~]# df -h | sed -e "2s/7.2/100/g;3s/shm/test/g"	//执行两个替换；
+
+```
 
 
 	11.3 字符处理命令
@@ -2782,16 +2850,18 @@ A 命令：sort [选项] 文件名
 			  -k n[,m]	按照指定的字段范围排序，从第n字段开始，m字段结束(默认到行尾
 功能：对文件内容或者输出内容进行 行排序；
 例：
+```shell script
 [root@localhost ~]# sort /etc/passwd
 [root@localhost ~]# sort -r /etc/passwd
 [root@localhost ~]# sort -t ":" -k 3,3 -n /etc/passwd
+```
 
 B 命令：wc [选项] 文件名
 			-l			只统计行数
 			-w			只统计单词数
 			-m			只统计字符数
 功能：统计内容信息；
-例：[root@localhost ~]# wc /etc/passwd
+例：`[root@localhost ~]# wc /etc/passwd`
 
 	
 	11.4 条件判断
@@ -2821,8 +2891,10 @@ a 按照文件类型进行判断
 
 -S 文件				判断文件是否存在，并且是否为套接字文件(是套接字文件为真)
 例：
+```shell script
 [root@localhost ~]# test -d /tmp && echo yes || echo no
 [root@localhost ~]# [ -e /tmp ] && echo yes || echo no
+```
 特别注意：[ -e /tmp ]中括号边界[]与内容之间必须有空格；
 
 b 按照文件权限进行判断
@@ -2840,7 +2912,7 @@ b 按照文件权限进行判断
 
 -k 文件				判断该文件是否存在，并且是否该文件拥有SBit权限(有SBit权限为真)
 
-例：[root@localhost ~]# [ -w /tmp  ] && echo yes || echo no
+例：`[root@localhost ~]# [ -w /tmp  ] && echo yes || echo no`
 
 
 c 两个文件之间进行比较
@@ -2852,7 +2924,7 @@ c 两个文件之间进行比较
 文件1 -ef 文件2		判断文件1是否和文件2的Inode号一致，可以理解为两个文件是否为同一
 					个文件，这个经常用于判断硬链接
 					
-例：[root@localhost tmp]# [ hehe -nt test.txt  ] && echo yes || echo no
+例：`[root@localhost tmp]# [ hehe -nt test.txt  ] && echo yes || echo no`
 
 d 两个整数比较
 测试选项				作用
@@ -2868,8 +2940,11 @@ d 两个整数比较
 
 整数1 -le 整数2		判断整数1是否小于等于整数2(小于等于为真)
 例：
+```shell script
 [root@localhost tmp]# [ 22 -gt 11  ] && echo yes || echo no
 [root@localhost tmp]# [ 22 -ge 11  ] && echo yes || echo no
+```
+
 
 e 字符串
 测试选项				作用
@@ -2881,12 +2956,14 @@ e 字符串
 
 字串1 != 字串2		判断字符串1是否和字符串2不相等(不相等返回真)
 例：
+```shell script
 [root@localhost tmp]# aa=123
 [root@localhost tmp]# [ aa==123  ] && echo yes || echo no
 yes
 [root@localhost tmp]# [ -z $aa  ] && echo yes || echo no       
 no
 
+```
 f 多重条件判断
 条件选项				作用
 判断1 -a 判断2		逻辑与，两个判断都成立，则返回结果为真
@@ -2895,15 +2972,16 @@ f 多重条件判断
  
  ! 判断				逻辑非，使原始的判断式取反，特别注意!后有空格
  
-例：[root@localhost tmp]# [ 22 -gt 20  -a  -d /tmp  ] && echo yes || echo no 
+例：`[root@localhost tmp]# [ 22 -gt 20  -a  -d /tmp  ] && echo yes || echo no `
 
 
 
 	
-	11.5 流程控制
+11.5 流程控制
 		
-		11.5.1 if语句
+11.5.1 if语句
 A 单分支if条件语句
+```shell script
 if [ 条件判断式 ];then
 	程序
 fi
@@ -2911,21 +2989,26 @@ fi
 if [ 条件判断式 ]
 	then
 		程序
-fi	
+fi
+```
+	
 例：判断分区的使用率
-	[root@localhost sh]# vim rate.sh
-	#!/bin/bash
-	#author:neo 
-	#e015年 05月 30日 星期六 11:12:40 CST
-	rate=$(df -h | grep /dev/sda5 | awk '{print $5}' | cut -d '%' -f 1)
-	if [ $rate -ge 30  ];then			#注意if后面必须有空格
-	#真实项目中是发邮件
-		echo "存储不足30%"
-	fi
+```shell script
+[root@localhost sh]# vim rate.sh
+#!/bin/bash
+#author:neo 
+#e015年 05月 30日 星期六 11:12:40 CST
+rate=$(df -h | grep /dev/sda5 | awk '{print $5}' | cut -d '%' -f 1)
+if [ $rate -ge 30  ];then			#注意if后面必须有空格
+#真实项目中是发邮件
+    echo "存储不足30%"
+fi
+```
 
 B 双分支if条件语句
 if
 例：类似可以备份mysql数据；
+```shell script
 #!/bin/bash
 #2015年 05月 30日 星期六 12:01:28 CST
 #测试if语句，进行默认数据备份，如mysql备份
@@ -2949,8 +3032,10 @@ if [ -d /tmp/dbbak  ]
                  tar -zcf etc_$date.tar.gz /etc db.txt &>/dev/null
                  rm -r /tmp/dbbak/db.txt
 fi
+```
 
 例2：判断Apache是否启动
+```shell script
 #!/bin/bash
 #2015年 05月 30日 星期六 12:48:53 CST
  
@@ -2967,12 +3052,14 @@ if [ "$port" == 'open'  ]
                  echo "$(date) restart httpd!" >> /tmp/http.err.log
 fi
  
+```
 恶补：可以通过 ntpdate [选项] server_id 手动调整服务器时间（调整不是设置）
 备注：本命令默认可能没有安装，可以：[root@localhost tmp]# yum -y install ntp
 例：(同步时间)
-[root@localhost tmp]# ntpdate 202.112.10.36
+`[root@localhost tmp]# ntpdate 202.112.10.36`
 
 C 多分支if条件语句
+```shell script
 if [ 条件判断式1 ]
 	then
 		条件1成立时，执行程序1
@@ -2983,7 +3070,9 @@ elif [ 条件判断式2 ]
 else
 	当所有条件都不成立时，最后执行程序
 fi
+```
 例：
+```shell script
 #!/bin/bash
 #2015年 06月 06日 星期六 19:59:59 CST
 #接收用户输入值，赋值到变量file
@@ -3004,9 +3093,10 @@ elif [ -d $file  ]
 else
         echo "输入的既不是文件，也不是路径"
 fi
+```
 
 		
-		11.5.2 case语句
+11.5.2 case语句
 A 语法：
 case $变量名 in
 	"值1")
@@ -3022,6 +3112,7 @@ case $变量名 in
 esac
 		
 例：
+```shell script
 #!/bin/bash
 #2015年 06月 06日 星期六 20:31:22 CST
 #输入提示
@@ -3042,18 +3133,24 @@ case "$input" in
                 ;;  
         *)  
                 echo "木鱼脑袋，这都不选！"     
-esac		
-		
-		11.5.3 for循环
-		
+esac
+	
+```
+	
+11.5.3 for循环
+	
 A 语法1：
+
+```
 for 变量 in 值1 值2 值3...
 	do
 		程序
 	done
+```
 	
 备注：值有多少个，循环多少次，每次循环前，先会把值赋给变量；
 例：(批量解压文件)
+```shell script
 #!/bin/bash
 #批量解压缩脚本,用于搭建lamp环境
 #把所有lamp环境的压缩包放在/lamp内
@@ -3070,8 +3167,11 @@ for ((初始值;循环控制条件;变量编号))
 	do
 		程序
 	done
+```
+
 
 例：
+```shell script
 #!/bin/bash
 #2015年 06月 06日 星期六 21:53:39 CST
 #批量添加指定用户
@@ -3092,15 +3192,19 @@ if [ ! -z "$username" -a ! -z "$usernum" -a ! -z "$password"  ]
                 fi  
 
 fi	
+```
 		
-		11.5.4 while循环和until循环
+11.5.4 while循环和until循环
  
 A while语法：
+```shell script
 while [条件判断式]	
 	do
 		程序
 	done
+```
 例：
+```shell script
 [root@localhost sh]# vim while.sh
 #!/bin/bash
 #2015年 06月 06日 星期六 22:45:42 CST
@@ -3113,6 +3217,7 @@ while [ $i -le 100 ]
                 i=$(($i+1))
         done
 echo $sum
+```
 
 B until语法：
 until [条件判断式]	
@@ -3121,6 +3226,7 @@ until [条件判断式]
 	done
 备注：添加判断式不成立，则循环，一旦成立则终止；
 例：
+```shell script
 [root@localhost sh]# vim while.sh
 #!/bin/bash
 #2015年 06月 06日 星期六 22:45:42 CST
@@ -3134,10 +3240,11 @@ until [ $i -le 100 ]
         done
 echo $sum
 
+```
 
 12 服务分类
 	
-	12.1 服务简介与分类
+12.1 服务简介与分类
 
 A Linux服务：
 a RPM包默认安装的服务：a1 独立的服务；b1 基于xinetd服务(xinitd本身是独立的)
@@ -3158,9 +3265,9 @@ b 查询源码包安装的服务
 备注：RPM包和源码包的区别就是安装目录不同；
 
 	
-	12.2 RPM包安装服务的管理
+12.2 RPM包安装服务的管理
 	
-		12.2.1 独立服务管理
+12.2.1 独立服务管理
 
 A RPM包的安装目录：
 /etc/init.d 		启动脚本位置(独立服务的启动脚本,/etc/rc.d/init.d内容是一样的)
@@ -3181,12 +3288,13 @@ b service 独立服务名 start|stop|status|restart|
 备注2：命令：service --status-all  功能：查询所有RPM包安装的服务的状态；
 
 C 独立服务的自启动
-a 命令：chkconfig [--level 运行级别] [独立服务名] [on|off]
+a 命令：`chkconfig [--level 运行级别] [独立服务名] [on|off]`
 功能：改变独立服务名的自启动
 例：
+```shell script
 # chkconfig --level 2345 httpd on			//自启动Apache
 # chkconfig httpd off		//关闭Apache的自启动，省略--level 2345,其实默认也是它
-
+```
 b 修改/etc/rc.d/rc.local文件，该文件会在系统启动后，用户登录前，执行该文件，也就是
 说该文件中的所有脚本会被执行；所以可以添加内容：
 /etc/rc.d/init.d/httpd start
@@ -3209,12 +3317,14 @@ c 使用ntsysv命令管理自启动(可以管理独立服务和xinetd服务，�
 
 A 安装xinetd与telnet(telnet基本不用),这两个默认是没有安装的
 例：
+```shell script
 [root@localhost ~]# yum -y install xinetd
 [root@localhost ~]# yum -y install telnet-server	
+```
 
 B xinetd服务的启动
 a 更改/etc/xinetd.d/telnet
-#vim /etc/xinetd.d/telnet
+`#vim /etc/xinetd.d/telnet`
 server telnet			←服务的名称为telnet
 {
 	flags 		=REUSE	←标志位REUSE，设定TCP/IPsocket可重用
@@ -3237,36 +3347,40 @@ C xinetd服务的自启动
 备注：xinetd的启动和自启动是相同的；即启动了就自启动，自启动就启动了；
 	
 	
-	12.3 源码包安装服务的管理
+12.3 源码包安装服务的管理
 	
 A 源码包安装服务的启动：使用绝对路径，调用启动脚本来启动。不同的源码包的启动脚本不同
 可以查看源码包的安装说明(进入源码包，vim INSTALL 查看)，查看启动脚本的方法：
 部分内容：
+```shell script
     $ ./configure --prefix=PREFIX
     $ make
     $ make install
     $ PREFIX/bin/apachectl start
+```
 	
-例：[root@localhost ]# /usr/local/apache2/bin/apachectl start|stop
+例：`[root@localhost ]# /usr/local/apache2/bin/apachectl start|stop`
 
 B 源码包安装服务的自启动：在/etc/rc.d/rc.local文件中加入：
-/usr/local/apache2/bin/apachectl start
+`/usr/local/apache2/bin/apachectl start`
 
 
 C 让源码包服务被服务管理命令service识别(不推荐)
 原理：利用软链接
 例：让源码包Apache服务能被service命令管理启动
-ln -s /usr/local/apache2/bin/apachectl /etc/init.d/apache
+`ln -s /usr/local/apache2/bin/apachectl /etc/init.d/apache`
 
 D 让源码包的Apache服务能被chkconfig与ntsysv命令管理自启动(不推荐)
 a 需要步骤C，创建软链接
 
 b 更改/etc/init.d/apache，添加内容：
 vim /etc/init.d/apache
+```shell script
 #chkconfig:35 86 76
 #指定httpd脚本可以被chkconfig命令管理。格式是：chkconfig:运行级别 启动顺序 关闭顺序
 #description:source package apache
 #内容随意
+```
 
 c chkconfig --add apache			//添加后就可以管理了，--del可以删除；
 
@@ -3278,7 +3392,7 @@ rc0.d  rc1.d  rc2.d  rc3.d  rc4.d  rc5.d  rc6.d
 
 
 	
-	12.4 服务管理总结
+12.4 服务管理总结
 
 总结：
 所有服务(除xinetd服务)的启动：绝对路径 start
@@ -3287,9 +3401,9 @@ rc0.d  rc1.d  rc2.d  rc3.d  rc4.d  rc5.d  rc6.d
 	
 13 Linux系统管理
 	
-	13.1 进程管理
+13.1 进程管理
 		
-		13.1.1 进程查看
+13.1.1 进程查看
 A 进程：正在执行的一个程序或命令，每一个进程都是一个运行的实体，都有自己的地址空间，
 并占用一定的资源
 
@@ -3368,7 +3482,7 @@ Swap:  2058072k total	交换分区(虚拟内存)的总大小
 					
 
 
-		13.1.2 终止进程
+13.1.2 终止进程
 
 A 命令：kill -l				//这是是小写L
 功能：查看可用的进程信号
@@ -3378,8 +3492,8 @@ A 命令：kill -l				//这是是小写L
 	9		SIGKILL			用来立即结束程序的运行，表示强制终止
 	15		SIGTERM			正常结束进程信号，kill命令的默认信号
 例:
-[root@localhost ~]# pstree -p				//查看PID
-[root@localhost ~]# kill -9 8260			//强制终止进程8260
+`[root@localhost ~]# pstree -p`				//查看PID
+`[root@localhost ~]# kill -9 8260`			//强制终止进程8260
 
 B 命令：killall [选项] [信号] 进程名
 				-i		交互式，询问是否要杀死某个进程
@@ -3391,18 +3505,20 @@ C 命令：pkill [选项] [信号] 进程名
 				-t 终端号		按照终端号剔除用户				
 功能：按照进程名终止进程或按照终端号剔除用户
 例：
+```shell script
 [root@localhost ~]# w							//显示登录终端
 [root@localhost ~]# pkill -9 -t tty1			//剔除本地登录用户tty1
+```
 
 
-	13.2 工作管理
+13.2 工作管理
 A 把进程放入后台
 方式一：命令	&
 说明：这种方式，进程在后台还在执行
 例：tar -zcf etc.tar.gz /etc &
 
 方式二：在命令执行过程中，按ctrl+z快捷键，进程放入后台，但进程是暂停的；
-例：[root@localhost ~]# top			//然后按ctrl+z
+例：`[root@localhost ~]# top`			//然后按ctrl+z
 
 B 查看后台工作
 命令：jobs [-l]			
@@ -3413,7 +3529,7 @@ B 查看后台工作
 C 将后台暂停的工作恢复到前台执行
 命令：fg %工作号
 		 %工作号			%号可以省略，但是注意工作号和PID的区别
-例：[root@localhost ~]# fg %1
+例：`[root@localhost ~]# fg %1`
 
 D 把后台暂停的工作恢复到后台执行
 命令：bg %工作号
@@ -3421,7 +3537,7 @@ D 把后台暂停的工作恢复到后台执行
 例：bg %1
 
 	
-	13.3 系统资源查看
+13.3 系统资源查看
 	
 A 命令：vmstat [刷新延时 刷新次数]	
 功能：监控系统资源
@@ -3429,8 +3545,8 @@ A 命令：vmstat [刷新延时 刷新次数]
 	
 B 命令：dmesg
 功能：显示开机时内核检测信息
-例：[root@localhost tmp]# dmesg | grep CPU		//显示CPU信息
-例：[root@localhost tmp]# dmesg | grep eth0		//显示网卡信息
+例：`[root@localhost tmp]# dmesg | grep CPU`		//显示CPU信息
+例：`[root@localhost tmp]# dmesg | grep eth0`		//显示网卡信息
 
 C 命令：free [选项]
 			 -b			以字节为单位显示
@@ -3438,11 +3554,11 @@ C 命令：free [选项]
 			 -m			以MB为单位显示
 			 -g			以GB为单位显示
 功能：查看内存使用状态
-例：[root@localhost tmp]# free -m
+例：`[root@localhost tmp]# free -m`
 
 D 命令：cat /proc/cpuinfo 
 功能：查看CPU信息
-例：[root@localhost ~]# cat /proc/cpuinfo
+例：`[root@localhost ~]# cat /proc/cpuinfo`
 
 E 命令：uptime
 功能：显示系统的启动时间和平均负载，也就是top命令的第一行。w命令也可以看到这个数据
@@ -3458,29 +3574,31 @@ F 命令：uname [选项]
 
 G 命令：file /bin/ls
 功能：判断当前系统位数
-例：[root@localhost ~]# file /bin/ls
+例：`[root@localhost ~]# file /bin/ls`
 
 H 命令：lsb_release -a
 功能：查询当前的Linux发行版本
-[root@localhost ~]# lsb_release -a
-
+`[root@localhost ~]# lsb_release -a
+`
 I 命令：lsof [选项]
 			  -c 字符串			只列出以字符串开头的进程打开的文件
 			  -u 用户名			只列出某个用户的进程打开的文件
 			  -p pid			列出某个PID进程打开的文件
 功能：列出进程打开或使用的文件信息			  
-例：[root@localhost ~]# lsof -c http
-例：[root@localhost ~]# lsof -u root
-例：[root@localhost ~]# lsof -p 14047 		
+例：`[root@localhost ~]# lsof -c http`
+例：`[root@localhost ~]# lsof -u root`
+例：[root@localhost ~]# lsof -p 14047` 		
 
 	
 	13.4 系统定时任务
 	
 A crond服务管理与访问控制
+```shell script
 [root@localhost ~]# service crond start		//启动crond服务
 
 [root@localhost ~]# chkconfig crond on		//设置crond服务为自启动，默认为自启动
 
+```
 B 命令：crontab [选项]
 				-e		编辑crontab任务
 				-l		查询crontab任务
@@ -3488,7 +3606,7 @@ B 命令：crontab [选项]
 功能：用户的crontab设置
 说明：crontab -e			#进入crontab编辑界面，会打开vim编辑你的工作。
 内容格式：
-* * * * * 命令
+`* * * * *` 命令
 项目				含义						范围
 第一个 *		一个小时当中的第几分钟		0-59
 第二个 *		一天当中的第几小时			0-23
@@ -3513,15 +3631,19 @@ B 命令：crontab [选项]
 						星期几不要和几号同时出现，容易造成混乱；
 						
 例：
+```shell script
 [root@localhost tmp]# crontab -e
  * * * * * echo 123 >> /tmp/test.txt
 * * * * * /sh/hello.sh
+```
 备注：hello.sh内容：
+```shell script
 #!/bin/bash
 #writer:neo 
 #2015年 05月 29日 星期五 15:28:33 CST
 date=$(date +\%y\%m\%d)			# %在crontab中特殊含义，即使是在任务文件中也要加
 echo "hello world $date"		# 转移符\
+```
 
 备注：在定时任务中单纯的echo并不会输出到屏幕，所以需要重定向以检测定时任务是否执行，如：
 ``` * * * * * echo hehe >> /tmp/test.txt ```
@@ -3537,13 +3659,13 @@ echo "hello world $date"		# 转移符\
 
 14 日志管理
 
-	14.1 日志管理简介
+14.1 日志管理简介
 A 在CentOS 6.x中日志服务已经由rsyslogd取代了原先的syslogd服务；
 
 B 确定服务启动
-# ps aux | grep rsyslogd		#查看服务是否启动
+`# ps aux | grep rsyslogd`		#查看服务是否启动
 
-# chkconfig --list | grep rsylog #查看服务是否自启动	
+`# chkconfig --list | grep rsylog` #查看服务是否自启动	
 
 C 常见的日志作用
 日志文件				作用
@@ -3571,7 +3693,7 @@ C 常见的日志作用
 备注：除系统默认日志外，通过RPM包方式安装的系统服务也会默认把日志放在/var/log/目录下(源码包安装的不会)	，不过这些日志不是由rsyslogd服务来记录和管理的，而是各个服务使用
 自己的日志管理文档来管理
 	
-	14.2 rsyslogd日志服务
+14.2 rsyslogd日志服务
 	
 A 日志文件格式
 	a 事件产生时间	
@@ -3626,7 +3748,7 @@ d 发送给在线用户，如"root"
 e 忽略或丢弃日志，如"~"
 
 
-	14.3 日志轮替(日志的分割和更替后删除)
+14.3 日志轮替(日志的分割和更替后删除)
 
 A 日志文件命名规则
 a 如果配置文件(/etc/logrotate.conf)中拥有“dateext”参数，那么日志会用日期作为日志
@@ -3657,22 +3779,26 @@ dateext			使用日期作为日志轮替文件的后缀。如secure-20150608
 
 C 把源码包安装的Apache日志加入轮替(PRM包安装的服务自动就有轮替)
 
-[root@localhost logs]# vim /etc/logrotate.conf
+`[root@localhost logs]# vim /etc/logrotate.conf`
 
 #Apache的access_log轮替参数
+```shell script
 /usr/local/apache2/logs/access_log{
         daily
         rotate 30
         compress
         mail 445354187@qq.com		#好像没作用
 }
+```
 #Apache的error_log
+```
 /usr/local/apache2/logs/error_log{
         daily
         rotate 30
         compress
         mail 445354187@qq.com
 }
+```
 
 D 命令：logrotate [选项] 文件配置名
 说明：如果此命令没有选项，则会按照配置文件中的条件进行日志轮替
@@ -3681,16 +3807,18 @@ D 命令：logrotate [选项] 文件配置名
 							配置文件中所有的日志进行轮替
 功能：实现日志轮替相关功能							
 例：
+```shell script
 [root@localhost log]# logrotate -f /etc/logrotate.conf
 [root@localhost log]# logrotate -v /etc/logrotate.conf
+```
 				
 
 				
 15 启动管理
 
-	15.1 CentOS 6.x 启动管理
+15.1 CentOS 6.x 启动管理
 	
-		15.1.1 系统运行级别		
+15.1.1 系统运行级别		
 A 运行级别
 运行级别			含义
 	0			关机
@@ -3702,19 +3830,19 @@ A 运行级别
 	6 			重启动
 	
 B 运行级别命令
-[root@localhost ~]# runlevel		#查看运行级别
+`[root@localhost ~]# runlevel`		#查看运行级别
 
-[root@localhost ~]# init 运行级别	#改变运行级别
+`[root@localhost ~]# init 运行级别`	#改变运行级别
 
 C 系统默认运行级别
-[root@localhost ~]# vim /etc/inittab	#开机后直接进入哪个运行级别	
+`[root@localhost ~]# vim /etc/inittab`	#开机后直接进入哪个运行级别	
 id:3:initdefault:
 		
-		15.1.2 系统启动过程(了解)
+15.1.2 系统启动过程(了解)
 
-	15.2 启动引导程序grub
+15.2 启动引导程序grub
 	
-		15.2.1 Grub配置文件
+15.2.1 Grub配置文件
 A Grub中分区表示
 硬盘					分区				Linux中设备文件名		Grub中设备文件名	
 
@@ -3729,8 +3857,9 @@ A Grub中分区表示
 				第一个逻辑				/dev/sdb5				hd(1,4)	
 				
 B Grub配置文件
-vi /boot/grub/grub.conf(或者软链接 /etc/grub.conf)
+`vi /boot/grub/grub.conf(或者软链接 /etc/grub.conf)`
 
+```shell script
 default=0 			#默认启动第一个系统
 timeout=5 			#等待时间，默认是5秒，选择系统的时间
 splashimage=(hd0,0)/grub/splash.xpm.gz
@@ -3743,9 +3872,10 @@ kernel /vmlinuz-2.6.32-279.el6.i686 ro root=UUID=b9a7a1a8-767f-4a87-8a2b-a535edb
 initrd /initramfs-2.6.32-279.el6.i686.img
 					#指定了initramfs内存文件系统镜像文件的所在位置
 					
+```
 
 				
-		15.2.2 Grub加密与字符界面分辨率调整
+15.2.2 Grub加密与字符界面分辨率调整
 
 A grub加密 
 a [root@localhost ~]# grub-md5-crypt 		#生成加密字符串，输入该命令后再输入密码，会产生加密字符串
@@ -3775,7 +3905,7 @@ initrd /initramfs-2.6.32-504.el6.i686.img
 32位	786			789			792				795
 备注：有时可能不接受十进制，那么把上面数字转化为16进制
 
-	15.3 系统修复模式
+15.3 系统修复模式
 
 A 单用户模式常见的错误修复
 a 遗忘root密码
@@ -3819,7 +3949,7 @@ C Linux安全性
 
 16 备份与恢复
 
-	16.1 备份概述
+16.1 备份概述
 A Linux系统需要备份的数据
 /root/目录
 /home/目录
@@ -3845,7 +3975,7 @@ b 增量备份：第一次完全备份，以后每次备份前一次没有的数
 
 c 差异备份：第一次完全备份，以后每次备份第一次备份中没有的数据；优缺点都居中；
 
-	16.2 dump和restore命令
+16.2 dump和restore命令
 
 A dump命令
 语法：dump [选项] 备份之后的文件名 原文件或目录
@@ -3857,14 +3987,17 @@ A dump命令
 			-W			显示允许被dump的分区的备份等级及备份时间
 功能：备份文件或目录
 备注：默认dump命令没有安装，要手动安装
+```shell script
 [root@localhost ~]# rpm -qa | grep dump 		#查看dump命令是否安装
 [root@localhost ~]# yum -y install dump			#没有，则安装；
+```
 例：（备份分区）
 dump -0uj -f /root/boot.bak.bz2 /boot/
 							#备份命令。先执行一次完全备份，并压缩和更新备份时间
 cat /etc/dumpdates			#查看备份时间文件
 cp install.log /boot/		#复制日志文件到/boot分区
-dump -1uj -f /root/boot.bak1.bz2 /boot/			
+dump -1uj -f /root/boot.bak1.bz2 /boot/		
+	
 #增量备份/boot分区，并压缩(猜测：先要参考目标目录下已经有的备份)
 dump –W					#查询分区的备份时间及备份级别的
 备注：只有分区备份才能1备份等级，文件和目录只能使用0
@@ -3900,14 +4033,14 @@ A 远程登录服务SSH
 
 a.登陆linux系统，打开终端命令。输入 rpm -qa |grep ssh 查找当前系统是否已经安装
 b.如果没安装，命令:
-# yum -y install ssh
+`# yum -y install ssh`
 c.启动命令:
-# /etc/init.d/sshd start
+`# /etc/init.d/sshd start`
 d.一定要设置开机自启动，查看命令：
-[root@localhost ~]# chkconfig --list | grep sshd
+`[root@localhost ~]# chkconfig --list | grep sshd`
 sshd            0:关闭  1:关闭  2:启用  3:启用  4:启用  5:启用  6:关闭
 设置命令：
-[root@localhost ~]# chkconfig sshd on
+`[root@localhost ~]# chkconfig sshd on`
 e.查看或编辑SSH服务配置文件，如 vi /etc/ssh/sshd.config   
  如果要修改端口，把 port 后面默认的22端口改成别的端口即可（注意前面的#号要去掉）
 f.如果需要远程连接SSH，需要把22端口在防火墙上开放。关闭防火墙，或者设置22端口例外
@@ -3994,6 +4127,7 @@ kill xxxx
 1005 更改服务端口，以更改sshd端口为例
 
 A 修改/etc/ssh/sshd_config配置文件 （特别注意这里是/etc/ssh/sshd_config，而不是/etc/ssh/ssh_config）
+```shell script
 [root@localhost ssh]# more sshd_config 
 #       $OpenBSD: sshd_config,v 1.69 2004/05/23 23:59:53 dtucker Exp $
 # This is the sshd server system-wide configuration file.  See
@@ -4006,11 +4140,14 @@ A 修改/etc/ssh/sshd_config配置文件 （特别注意这里是/etc/ssh/sshd_c
 Port 22             	//先把22保留，防止更改未成功，而原来的页连接不上了
 port 12321            //添加一个新的端口
 #Protocol 2,1
+```
 
 B 重启ssh服务让修改的端口号生效
+```shell script
 [root@localhost ~]# service sshd restart
 Stopping sshd:[  OK  ]
 Starting sshd:[  OK  ]
+```
 
 1006 配置防火墙
 
@@ -4021,19 +4158,22 @@ iptables.deny：設定抵擋某些惡意主機的進入；
 iptables.allow：設定允許某些自訂的後門來源主機！
 鳥哥個人習慣是將這個腳本放置到 /usr/local/virus/iptables 目錄下，你也可以自行放置到自己習慣的位置去。 那底下就來瞧瞧這支腳本是怎麼寫的吧！
 
+```shell script
 [root@www ~]# mkdir -p /usr/local/virus/iptables
 [root@www ~]# cd /usr/local/virus/iptables
 [root@www iptables]# vim iptables.rule
-#!/bin/bash
+```
+`#!/bin/bash`
 
-# 請先輸入您的相關參數，不要輸入錯誤了！
+請先輸入您的相關參數，不要輸入錯誤了！
   EXTIF="eth0"             # 這個是可以連上 Public IP 的網路介面
   INIF="eth1"              # 內部 LAN 的連接介面；若無則寫成 INIF=""
   INNET="192.168.100.0/24" # 若無內部網域介面，請填寫成 INNET=""
   export EXTIF INIF INNET
 
-# 第一部份，針對本機的防火牆設定！##########################################
-# 1. 先設定好核心的網路功能：
+第一部份，針對本機的防火牆設定！
+1. 先設定好核心的網路功能：
+```shell script
   echo "1" > /proc/sys/net/ipv4/tcp_syncookies
   echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
   for i in /proc/sys/net/ipv4/conf/*/{rp_filter,log_martians}; do
@@ -4043,8 +4183,10 @@ iptables.allow：設定允許某些自訂的後門來源主機！
 send_redirects}; do
         echo "0" > $i
   done
+```
 
-# 2. 清除規則、設定預設政策及開放 lo 與相關的設定值
+2. 清除規則、設定預設政策及開放 lo 與相關的設定值
+```shell script
   PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/sbin:/usr/local/bin; export PATH
   iptables -F
   iptables -X
@@ -4054,8 +4196,10 @@ send_redirects}; do
   iptables -P FORWARD ACCEPT
   iptables -A INPUT -i lo -j ACCEPT
   iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+```
 
-# 3. 啟動額外的防火牆 script 模組
+3. 啟動額外的防火牆 script 模組
+```shell script
   if [ -f /usr/local/virus/iptables/iptables.deny ]; then
         sh /usr/local/virus/iptables/iptables.deny
   fi
@@ -4065,15 +4209,19 @@ send_redirects}; do
   if [ -f /usr/local/virus/httpd-err/iptables.http ]; then
         sh /usr/local/virus/httpd-err/iptables.http
   fi
+```
 
-# 4. 允許某些類型的 ICMP 封包進入
+4. 允許某些類型的 ICMP 封包進入
+```shell script
   AICMP="0 3 3/4 4 11 12 14 16 18"
   for tyicmp in $AICMP
   do
     iptables -A INPUT -i $EXTIF -p icmp --icmp-type $tyicmp -j ACCEPT
   done
+```
 
-# 5. 允許某些服務的進入，請依照你自己的環境開啟
+5. 允許某些服務的進入，請依照你自己的環境開啟
+```shell script
 # iptables -A INPUT -p TCP -i $EXTIF --dport  21 --sport 1024:65534 -j ACCEPT # FTP
 # iptables -A INPUT -p TCP -i $EXTIF --dport  22 --sport 1024:65534 -j ACCEPT # SSH
 # iptables -A INPUT -p TCP -i $EXTIF --dport  25 --sport 1024:65534 -j ACCEPT # SMTP
@@ -4084,9 +4232,11 @@ send_redirects}; do
 # iptables -A INPUT -p TCP -i $EXTIF --dport 443 --sport 1024:65534 -j ACCEPT # HTTPS
 iptables -A INPUT -p TCP -i lo --dport 6379 --sport 1024:65534 -j ACCEPT # REDIS，供服务器自己访问，以后甚至可以指定sip(即来源ip)和dip(目标ip)
 
-# 第二部份，針對後端主機的防火牆設定！###############################
-# 1. 先載入一些有用的模組
-  modules="ip_tables iptable_nat ip_nat_ftp ip_nat_irc ip_conntrack 
+```
+第二部份，針對後端主機的防火牆設定！
+1. 先載入一些有用的模組
+```shell script
+modules="ip_tables iptable_nat ip_nat_ftp ip_nat_irc ip_conntrack 
 ip_conntrack_ftp ip_conntrack_irc"
   for mod in $modules
   do
@@ -4095,8 +4245,9 @@ ip_conntrack_ftp ip_conntrack_irc"
             modprobe $mod
       fi
   done
+```
 
-# 2. 清除 NAT table 的規則吧！
+2. 清除 NAT table 的規則吧！
 ```shell script
 iptables -F -t nat
 iptables -X -t nat
@@ -4106,7 +4257,7 @@ iptables -t nat -P POSTROUTING ACCEPT
 iptables -t nat -P OUTPUT      ACCEPT
 ```
 
-# 3. 若有內部介面的存在 (雙網卡) 開放成為路由器，且為 IP 分享器！
+3. 若有內部介面的存在 (雙網卡) 開放成為路由器，且為 IP 分享器！
 ```shell script
   if [ "$INIF" != "" ]; then
     iptables -A INPUT -i $INIF -j ACCEPT
@@ -4124,7 +4275,7 @@ iptables -t nat -P OUTPUT      ACCEPT
   #          --mss 1400:1536 -j TCPMSS --clamp-mss-to-pmtu
 
 ```
-# 4. NAT 伺服器後端的 LAN 內對外之伺服器設定
+4. NAT 伺服器後端的 LAN 內對外之伺服器設定
 ```shell script
 # iptables -t nat -A PREROUTING -p tcp -i $EXTIF --dport 80 \
 #          -j DNAT --to-destination 192.168.1.210:80 # WWW
@@ -4136,21 +4287,21 @@ iptables -t nat -P OUTPUT      ACCEPT
 #          -j DNAT --to-destination 192.168.100.20
 ```
 
-# 6. 最終將這些功能儲存下來吧！
-  /etc/init.d/iptables save
+6. 最終將這些功能儲存下來吧！
+  `/etc/init.d/iptables save`
 特別留意上面程式碼的特殊字體部分，基本上，你只要修改一下最上方的介面部分， 應該就能夠運作這個防火牆了。不過因為每個人的環境都不相同， 因此你在設定完成後，依舊需要測試一下才行喔！不然，出了問題不要怪我啊！.... 再來看一下關於 iptables.allow 的內容是如何？假如我要讓一個 140.116.44.0/24 這個網域的所有主機來源可以進入我的主機的話，那麼這個檔案的內容可以寫成這樣：
 
 ```shell script
 [root@www iptables]# vim iptables.allow
 #!/bin/bash
 # 底下則填寫你允許進入本機的其他網域或主機啊！
-  iptables -A INPUT -i $EXTIF -s 140.116.44.0/24 -j ACCEPT
+iptables -A INPUT -i $EXTIF -s 140.116.44.0/24 -j ACCEPT
 
 # 底下則是關於抵擋的檔案設定法！
 [root@www iptables]# vim iptables.deny
 #!/bin/bash
 # 底下填寫的是『你要抵擋的那個咚咚！』
-  iptables -A INPUT -i $EXTIF -s 140.116.44.254 -j DROP
+iptables -A INPUT -i $EXTIF -s 140.116.44.254 -j DROP
 
 [root@www iptables]# chmod 700 iptables.*
 ```
@@ -4205,6 +4356,7 @@ ps命令常用用法（方便查看系统进程）
 
 运行 ps aux 的到如下信息：
 
+```shell script
 root:# ps aux
 USER      PID       %CPU    %MEM    VSZ    RSS    TTY    STAT    START    TIME    COMMAND
 smmsp    3521    0.0    0.7    6556    1616    ?    Ss    20:40    0:00    sendmail: Queue runner@01:00:00 f
@@ -4217,6 +4369,7 @@ root    3627    0.0    0.2    3448    552    ?    SNs    20:41    0:00    anacro
 root    3636    0.0    0.1    2304    420    ?    Ss    20:41    0:00    /usr/sbin/atd
 dbus    3655    0.0    0.5    13840    1084    ?    Ssl    20:41    0:00    dbus-daemon-1 --system
 
+```
 
 Head标头：
 
