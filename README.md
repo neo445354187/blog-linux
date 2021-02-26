@@ -322,7 +322,7 @@ x			执行		可以执行文件					可以进入目录
 特别注意：删除文件是只需要相应 目录 有写w权限即可；
 备注：对于Linux系统中目录rx权限几乎都是同时出现的；
 	
-		4.2.1 权限管理命令chmod
+4.2.1 权限管理命令chmod
 		
 Q 	命令		英文										命令所在路径 	权限
 	chmod	change the permissions mode of a file 	/bin/chmod 	  所有用户
@@ -343,7 +343,7 @@ r -- 4 	w -- 2  e -- 1
 备注：能够改变目录或文件权限的只有管理员root和所有者；
 
 		
-		4.2.2 其他权限管理命令
+4.2.2 其他权限管理命令
 R 	命令		英文										命令所在路径 	权限
 	chown	change file ownership				 	/bin/chown 	  所有用户
 语法：chown [用户] [文件或目录]
@@ -377,7 +377,7 @@ T 	命令		英文										命令所在路径 	权限
 
 4.3 文件搜索部分的学习
 
-	4.3.1 文件搜索命令find
+4.3.1 文件搜索命令find
 说明：尽量把目录结构整理清晰，文件规整放置，减少搜索，因为会消耗大量系统资源；
 	
 U 	命令		英文						命令所在路径 			权限
@@ -430,7 +430,7 @@ i	-type		根据文件类型查找，f代表文件，d代表目录，l代表软�
 j	-inum		根据i节点查找
 例：find . -inum 31531 -exec rm {} \;
 
-		4.3.2 其他搜索命令
+4.3.2 其他搜索命令
 
 V 	命令		英文						命令所在路径 			权限
 	locate	locate					/usr/bin/locate			所有用户
@@ -466,7 +466,7 @@ Y 	命令		英文						命令所在路径 			权限
 例：grep -v ^# /etc/inittab				//在文件inittab中排除行首字母为#的行
 										并输出，这里就不是默认了，而是设置了
 										^ ,尾部用$
-	4.4 帮助命令
+4.4 帮助命令
 Z	命令		英文						命令所在路径 			权限
 	man		manual					/usr/bin/man			所有用户
 语法：man 命令或配置文件
@@ -489,7 +489,7 @@ AA  命令		英文						命令所在路径 			权限
 功能：获得shell内置命令的帮助信息，与上面的man对应；
 例：help umask			//查看umask的帮助信息
 
-	4.5 用户管理命令
+4.5 用户管理命令
 	
 AB  命令		英文						命令所在路径 			权限
 	useradd	useradd					/usr/sbin/useradd		root
@@ -523,7 +523,7 @@ AC  命令		英文						命令所在路径 			权限
 功能：查看登录用户详细信息；
 例：w
 
-	4.5 压缩解压命令
+4.5 压缩解压命令
 
 
 AD  命令		英文						命令所在路径 			权限
@@ -591,7 +591,7 @@ AI  命令		英文						命令所在路径 			权限
 		想减肥
 
 
-	4.6 网络命令
+4.6 网络命令
 AJ  命令		英文						命令所在路径 			权限
 	write	write					/usr/bin/write			所有用户
 语法：write <用户名>
@@ -679,7 +679,7 @@ AT  命令		 英文						命令所在路径 			权限
 备注2：在光盘目录下是无法卸载挂载点哦！
 备注3：卸载挂载的语法：umount /dev/sr0 
 
-	4.8 关机重启命令
+4.8 关机重启命令
 AU  命令		 英文						命令所在路径 			权限
 	shutdown	  												
 语法：shutdown [选项] 时间
@@ -994,10 +994,13 @@ cpio -idv .文件绝对路径
 rpm2cpio	//将rmp包转化为cpio格式的命令
 cpio		//是一个标准的工具，它用于创建软件档案文件和从档案文件中提取文件
 例：
+```shell script
 # rpm -qf /bin/ls			//查询ls命令属于哪个软件包
 # mv /bin/ls /tmp			//造成ls误删假象
 # rpm2cpio /mnt/cdrom/Packages/coreutils-8.4-37.el6.i686.rpm | cpio -div ./bin/ls					 //提取RPM包中ls命令放到当前目录的/bin/ls下
 # cp /root/bin/ls /bin		//把ls命令复制到/bin目录下，修复文件丢失
+```
+
 
 
 F1 命令：cpio 选项 <文件|设备>
