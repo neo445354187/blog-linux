@@ -307,7 +307,7 @@ c 不能跨分区
 d 不能针对目录使用
 
 
-	4.2 权限管理命令
+4.2 权限管理命令
 				文件目录权限总结
 代表字符		权限		对文件的含义					对目录的含义
 
@@ -856,7 +856,7 @@ map ^E 0x
 
 6 软件包管理
 
-	6.1 软件包管理简介
+6.1 软件包管理简介
 A 安装包简介
 a 源码包：可以直接看到源代码，例如C语言（其中包含脚本安装包，有安装界面的那种）
 优点：
@@ -881,7 +881,7 @@ b 二进制包(windows下为exe，Linux下为RPM包和系统默认包)：为机�
 功能选择不如源码包灵活
 依赖性
 
-	6.2 RPM包管理-rpm命令管理
+6.2 RPM包管理-rpm命令管理
 A RPM包命名原则
 httpd-2.2.15-15.el6.centos.1.i686.rpm
 httpd 			软件包名
@@ -1556,7 +1556,7 @@ c `[root@localhost ~]# mount -o remount /`
 备注：重新挂载文件系统或重启系统，使修改生效；
 							 
 									
-		8.1.2 查看与设定ACL权限
+8.1.2 查看与设定ACL权限
 		
 A 命令：getfacl 文件名
 功能：查看acl权限
@@ -1611,7 +1611,7 @@ D 为组设置ACL权限
 
 	
 				
-		8.1.3 最大有效权限与删除ACL权限
+8.1.3 最大有效权限与删除ACL权限
 A 用户的真实得到的权限：由最大有效权限mask与指定的ACL权限'相与'得到的；
 备注：'相与'例子：mask中有r权限，指定有r权限，则用户真实权限有r，其余情况用户真实权限没有r；
 		
@@ -1736,7 +1736,7 @@ b 取消粘着位
 语法1：chmod 777 目录名
 语法2：chmod o-t 目录名
 
-	8.3 文件系统属性chattr权限（作用：防止用户误操作删除文件）
+8.3 文件系统属性chattr权限（作用：防止用户误操作删除文件）
 A 命令：chattr
 语法：chattr [+-=] [选项] 文件或目录名
 			  +				增加权限
@@ -1763,7 +1763,7 @@ B 命令：lsattr
 例：lsattr -d /test	
 
 
-	8.4 系统命令sudo权限
+8.4 系统命令sudo权限
 A sudo权限
 a root把本来只能超级用户执行的命令赋予普通用户执行
 b sudo操作的对象是系统命令
@@ -1867,7 +1867,7 @@ D 命令：dumpe2fs 分区设备名
 功能：显示磁盘状态
 功能：`[root@localhost ~]# dumpe2fs /dev/sda5`
 		
-		9.2.2挂载命令
+9.2.2挂载命令
 A 命令：mount [-l]		
 功能：查询系统中已经挂载的设备，-l会显示卷标名称
 例：[root@localhost ~]# mount 
@@ -1888,7 +1888,7 @@ remount			重新挂载已经挂载的文件系统，一般用于指定修改特�
 例：mount -o remount,noexec /home/		//重新挂载分区，并使用noexec权限
 备注：可以考虑把用户上次的分区设置为noexec，防止病毒；改回去就把上例中noexec改为exec即可；
 
-		9.2.3 挂载光盘和U盘
+9.2.3 挂载光盘和U盘
 A 挂载光盘
 a `[root@localhost mnt]# mkdir cdrom`		//建立挂载点
 b 将光盘放入光驱
@@ -1918,7 +1918,7 @@ d `[root@localhost ~]# mount -t vfat /dev/sdb1 /mnt/usb`   //挂载
 注意:Linux中把FAT16分区识别为fat ，把FAT32识别为vfat，fat和vfat是针对-t选项
 注意2：Linux默认不支持NTFS文件系统（形式的硬或U盘）
 
-	9.2.4 支持NTFS文件系统
+9.2.4 支持NTFS文件系统
 A 下载NTFS-3G插件
 http://www.tuxera.com/community/ntfs-3g-download/
 	
@@ -2018,7 +2018,7 @@ F 建立挂载点并挂载
 备注：以上进行的分区挂载等，在重启之后有需要手动挂载；
 
 	
-		9.3.2 分区自动挂载与fatab文件修复
+9.3.2 分区自动挂载与fatab文件修复
 A 编辑/etc/fstab文件
 部分内容	：	
 UUID=fac6b26e-b796-45bf-b2a6-ce8a2b41a04e  /     ext4    defaults   1 1
@@ -2044,7 +2044,7 @@ b 输入：[root@localhost /]# mount -o remount,rw /
 c 更改/etc/fstab文件中的错误；
 
 	
-	9.4 分配swap分区
+9.4 分配swap分区
 A 命令：free -m
 功能：显示内存和swap使用状况(选项m表示以MB显示)	
 例：free -m
@@ -2334,7 +2334,7 @@ B bash中其他特殊符号
 			
  $()		和反引号作用一样，用来引用系统命令
  
- #			在shell脚本中，#开头行代表注释(除首行) 
+ 			在shell脚本中，#开头行代表注释(除首行) 
  
  $			用于调用变量的值，如调用变量name的值时，需要用$name的方式得到变量的值
  
@@ -2427,7 +2427,7 @@ D PS1：定义系统提示符的变量(不能通过env查看，PS1默认是数�
 例：[root@localhost ~]# PS1='[\u@\t \w]\$ '		//注意：等号右边一定要有引号
 
 
-		10.4.3 位置参数变量
+10.4.3 位置参数变量
 		
 A 位置参数变量
 位置参数变量				作用
@@ -2471,7 +2471,7 @@ echo $#
 4
 4 
 		
-		10.4.4 预定义变量
+10.4.4 预定义变量
 A 预定义变量
 
 预定义变量			作用
@@ -2841,7 +2841,7 @@ a test"
 ```
 
 
-	11.3 字符处理命令
+11.3 字符处理命令
 A 命令：sort [选项] 文件名
 			  -f 		忽略大小写
 			  -n		以数值型进行排序，默认使用字符串型进行排序
@@ -2864,7 +2864,7 @@ B 命令：wc [选项] 文件名
 例：`[root@localhost ~]# wc /etc/passwd`
 
 	
-	11.4 条件判断
+11.4 条件判断
 	
 A 判断两种格式：
 a test [选项] 文件名
@@ -3590,7 +3590,7 @@ I 命令：lsof [选项]
 例：[root@localhost ~]# lsof -p 14047` 		
 
 	
-	13.4 系统定时任务
+13.4 系统定时任务
 	
 A crond服务管理与访问控制
 ```shell script
@@ -4430,10 +4430,10 @@ logrotate对日志进行轮替，配置文件在/etc/logrotate.conf 和/etc/logr
 ```
 
 ### 备份说明
-/etc 		#整个目录
-/home 		#整个目录
-/var/spool/mail 	
-/boot
-/root
-/var/www 	#不一定在这里，最好把nginx配置也备份
-/var/lib/mysql 	#也不一定在这里，最好把mysql配置也备份
+- /etc 		#整个目录
+- /home 		#整个目录
+- /var/spool/mail 	
+- /boot
+- /root
+- /var/www 	#不一定在这里，最好把nginx配置也备份
+- /var/lib/mysql 	#也不一定在这里，最好把mysql配置也备份
